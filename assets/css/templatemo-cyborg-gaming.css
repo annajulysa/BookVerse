@@ -214,7 +214,7 @@ section {
 }
 
 .heading-section h4 {
-  color: #ec6090;
+  color: #ffc107;
   font-size: 34px;
   text-decoration: none;
   margin-bottom: 30px;
@@ -1524,7 +1524,7 @@ Profile Style
 .main-profile {
   border-radius: 23px;
   padding: 30px;
-  background-color: #1f2122;
+  background-color: #228791;
 }
 
 .main-profile .main-info span {
@@ -1551,7 +1551,7 @@ Profile Style
 .main-profile ul {
   border-radius: 23px;
   padding: 30px;
-  background-color: #27292a;
+  background-color: #feb3a4;
 }
 
 .main-profile ul li {

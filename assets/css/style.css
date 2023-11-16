@@ -39,7 +39,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #accffe; }
+  background: #042f30; }
 
 .inner {
   position: relative;
@@ -134,7 +134,7 @@ button {
   align-items: center;
   justify-content: center;
   padding: 0;
-  background: #99ccff;
+  background: #74cbc4;
   color: #fff;
   text-transform: uppercase;
   font-family: "Muli-SemiBold";
@@ -154,7 +154,7 @@ button {
     width: 100%;
     height: 100%;
     z-index: 1;
-    background-color: rgba(52, 152, 253, 0.25);
+    background-color: #11181863;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     -o-transition: all 0.3s;

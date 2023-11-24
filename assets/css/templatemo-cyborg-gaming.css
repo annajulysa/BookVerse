@@ -123,13 +123,13 @@ Global Styles
 */
 html,
 body {
-  background: #042f30;
+  background: #394077;
   font-family: 'Poppins', sans-serif;
 }
 
 body .page-content {
   margin-top: 110px;
-  background-color: #74cbc4;
+  background-color: #d5f1ff;
   padding: 60px;
   border-radius: 23px;
 }
@@ -401,7 +401,7 @@ Header Style
 }
 
 .header-area .main-nav .logo {
-  border-right: 1px solid #27292a;
+  border-right: 1px solid #394077 /*#27292a*/;
   flex-basis: 25%;
   margin-right: 5%;
   -webkit-transition: all 0.3s ease 0s;
@@ -449,7 +449,7 @@ Header Style
   font-weight: 400;
   font-size: 14px;
   text-transform: capitalize;
-  color: #666;
+  color: #dce3f3;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
@@ -461,7 +461,7 @@ Header Style
 }
 
 .header-area .main-nav .nav li:last-child a {
-  background-color: #27292a;
+  background-color: 8eafd7;
   padding: 8px 10px 8px 20px;
   border-radius: 23px;
 }
@@ -485,7 +485,7 @@ Header Style
 .header-area .main-nav .nav li:last-child:hover a,
 .header-area .main-nav .nav li:last-child a.active {
   color: #fff !important;
-  background-color: #dc3545 !important;
+  background-color: #ed5a8c !important;
 }
 
 .background-header .main-nav .nav li:hover a,
@@ -773,7 +773,8 @@ Banner Style
 */
 
 .main-banner {
-  background-image: url(../images/banner-bg.png);
+  background-image: url(../images/homeImg.png);
+  /*background-image: url(../images/banner-bg.png);*/
   background-position: center center;
   background-size: cover;
   min-height: 380px;
@@ -796,7 +797,7 @@ Banner Style
 
 .main-banner h4 em {
   font-style: normal;
-  color: #e05955;
+  color: #eb5d88;
 }
 
 /* 
@@ -877,7 +878,7 @@ Gaming Library Style
 .gaming-library {
   margin-top: 60px;
   padding: 30px;
-  background-color: #042f30;
+  background-color: #8daddc;
   border-radius: 23px;
 }
 
@@ -1173,7 +1174,7 @@ Live Stream Style
 .live-stream {
   margin-top: 60px;
   border-radius: 23px;
-  background-color: #042f30;
+  background-color: #8daedd;
   padding: 30px;
 }
 
@@ -1239,7 +1240,7 @@ Live Stream Style
 
 .live-stream span i {
   color: #fff;
-  background-color: #ffc107;
+  background-color: #394077;
   border-radius: 50%;
   font-size: 12px;
   width: 20px;
@@ -1252,7 +1253,7 @@ Live Stream Style
 
 .live-stream span {
   font-size: 14px;
-  color: #ffc107;
+  color: #394077;
 }
 
 .live-stream .down-content h4 {
@@ -1311,11 +1312,11 @@ Game Details Style
 .game-details .content {
   border-radius: 23px;
   padding: 30px;
-  background-color: #1f2122;
+  background-color: /*#1f2122*/ #8daddc;
 }
 
 .game-details .content .left-info {
-  background-color: #27292a;
+  background-color: /*#27292a*/ #394077;
   border-radius: 23px;
   padding: 30px;
   margin-bottom: 30px;
@@ -1331,7 +1332,7 @@ Game Details Style
 }
 
 .game-details .content .left-info span {
-  color: #666;
+  color: #d5f1ff /* #666*/;
   display: block;
   margin-top: 7px;
   font-weight: 400;
@@ -1356,7 +1357,7 @@ Game Details Style
 }
 
 .game-details .content .right-info {
-  background-color: #27292a;
+  background-color: #394077;
   border-radius: 23px;
   padding: 30px;
   margin-bottom: 30px;
@@ -1524,7 +1525,7 @@ Profile Style
 .main-profile {
   border-radius: 23px;
   padding: 30px;
-  background-color: #228791;
+  background-color: #3a3f76;
 }
 
 .main-profile .main-info span {
@@ -1551,7 +1552,7 @@ Profile Style
 .main-profile ul {
   border-radius: 23px;
   padding: 30px;
-  background-color: #feb3a4;
+  background-color: #d5f1ff;
 }
 
 .main-profile ul li {

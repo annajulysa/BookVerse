@@ -485,7 +485,7 @@ Header Style
 .header-area .main-nav .nav li:last-child:hover a,
 .header-area .main-nav .nav li:last-child a.active {
   color: #fff !important;
-  background-color: #e75e8d !important;
+  background-color: #dc3545 !important;
 }
 
 .background-header .main-nav .nav li:hover a,
@@ -877,12 +877,12 @@ Gaming Library Style
 .gaming-library {
   margin-top: 60px;
   padding: 30px;
-  background-color: #1f2122;
+  background-color: #042f30;
   border-radius: 23px;
 }
 
 .gaming-library .item {
-  border-bottom: 1px solid #27292a;
+  border-bottom: 1px solid #484d4d;
   margin-bottom: 20px;
   padding-bottom: 20px;
 }
@@ -907,7 +907,7 @@ Gaming Library Style
 
 .gaming-library .item ul li {
   display: inline-block;
-  width: 17%;
+  width: 33.33%;
 }
 
 .gaming-library .item ul li:first-child {
@@ -1173,7 +1173,7 @@ Live Stream Style
 .live-stream {
   margin-top: 60px;
   border-radius: 23px;
-  background-color: #228791;
+  background-color: #042f30;
   padding: 30px;
 }
 

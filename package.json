@@ -1,13 +1,13 @@
 {
   "name": "psw2324_202200746",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Projeto Final Servicos Web",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Anna Almada 202200746",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2"

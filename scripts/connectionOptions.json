@@ -1,0 +1,11 @@
+{
+    "server":{
+        "port": 3306
+    },
+    "database": {
+        "host": "localhost",
+        "user": "BD_202200746",
+        "database": "BD_202200746",
+        "password": "user"
+    }
+}

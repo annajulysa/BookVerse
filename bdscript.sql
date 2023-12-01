@@ -37,3 +37,6 @@ create table Livro_User(
 	Constraint FK_LivroUser_livro foreign key (idLivro)
 	references Livro(idLivro)
 );
+
+Select * from user;
+INSERT INTO user(username, email, pass) VALUES ('teste', 'teste@gmail.com', 'teste');

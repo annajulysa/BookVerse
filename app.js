@@ -18,7 +18,7 @@ app.use(express.static("www"));
 //app.get("/sensor", requestHandlers.getSensors);
 //app.get("/sensor/:id/sample", requestHandlers.getSamples);
 app.post("/user", requestHandlers.createUpdateUser);
-app.put("/user/:id", requestHandlers.createUpdateUser);
+//app.put("/user/:id", requestHandlers.createUpdateUser);
 
 // start server
 app.listen(connectionOptions.port, function () {

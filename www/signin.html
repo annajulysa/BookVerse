@@ -7,6 +7,7 @@
     
     <!-- STYLE CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="./assets/js/PSW2023.js"></script>
 </head>
 
 <body>
@@ -18,7 +19,7 @@
                 <h3>Login</h3>
                 <div class="form-holder">
                     <span class="lnr lnr-user"></span>
-                    <input type="text" id="usernameL" class="form-control" placeholder="Username">
+                    <input type="text" id="mailL" class="form-control" placeholder="Email">
                 </div>
                 <div class="form-holder">
                     <span class="lnr lnr-phone-handset"></span>
@@ -30,7 +31,7 @@
                     <input type="password" id="passwordL" class="form-control" placeholder="Password">
                 </div>
                 
-                <button>
+                <button type="button" onclick="processingLogin()">
                     <span>Entrar</span>
                 </button>
 

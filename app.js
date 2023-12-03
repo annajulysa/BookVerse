@@ -16,11 +16,8 @@ app.use(express.static("www"));
 
 
 // routing
-//app.get("/sensor", requestHandlers.getSensors);
-//app.get("/sensor/:id/sample", requestHandlers.getSamples);
-app.post("/user", requestHandlers.createUpdateUser);
-//app.put("/user/:id", requestHandlers.createUpdateUser);
-
+app.get("/login", requestHandlers.getUser);
+//app.post("/user", requestHandlers.createUpdateUser);
 
 
 // start server

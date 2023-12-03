@@ -16,8 +16,8 @@ app.use(express.static("www"));
 
 
 // routing
-app.get("/login", requestHandlers.getUser);
-//app.post("/user", requestHandlers.createUpdateUser);
+app.post("/logins", requestHandlers.getUser);
+app.post("/registar", requestHandlers.createUpdateUser);
 
 
 // start server

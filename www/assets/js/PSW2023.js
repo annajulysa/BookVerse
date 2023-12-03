@@ -37,7 +37,7 @@ class Information {
                     info.users.push(newUser);
                 }
             }
-            xhr.open("POST", "http://localhost:8080/user", true);
+            xhr.open("POST", "/registar", true);
         }
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(person));
@@ -48,10 +48,10 @@ function processingLogin() {
     var mail = document.getElementById("mailL").value;
     var password = document.getElementById("passwordL").value;
 
-    var dados = {mail: mail, pass: pass};
+//    var dados = {mail: mail, pass: password};
 
     var xhr = new XMLHttpRequest();        
-    xhr.open("POST", "/login", true);
+    xhr.open("POST", "/logins", true);
 
     xhr.onreadystatechange = function () {        
         if ((this.readyState === 2) && (this.status === 200)) {

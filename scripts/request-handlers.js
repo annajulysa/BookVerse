@@ -8,11 +8,11 @@ const createUpdateUser = (req, res) => {
     var sql;
     var username = req.body.username;
     var mail = req.body.mail;
-    var password = req.body.password;
+    var password = req.body.pass;
     var passConfirmed = req.body.passConfirmed;
     
     if(req.method == "POST") {
-        sql = mysql.format("INSERT INTO user(username, email, pass) VALUES ('?','?','?')", [username, mail, password]);
+        sql = mysql.format("INSERT INTO user(username, email, pass) VALUES (?,?,?)", [username, mail, password]);
     }
     connection.query(sql,function (err, rows, fields) {
         if (err) {

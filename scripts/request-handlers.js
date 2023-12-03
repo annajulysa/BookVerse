@@ -5,10 +5,10 @@ const options = require("./connectionOptions.json").database;
 const createUpdateUser = (req, res) => {
     var connection = mysql.createConnection(options);
     var sql;
-    var username = req.query.usernameR;
-    var mail = req.body.mailR;
-    var password = req.body.passwordR;
-    var passConfirmed = req.body.passConfirmedR;
+    var username = req.body.username;
+    var mail = req.body.mail;
+    var password = req.body.password;
+    var passConfirmed = req.body.passConfirmed;
 
     console.log(username+' - '+mail )
     

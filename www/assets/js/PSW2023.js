@@ -54,7 +54,7 @@ function processingLogin() {
     xhr.open("POST", "/logins", true);
 
     xhr.onreadystatechange = function () {        
-        if ((this.readyState === 2) && (this.status === 200)) {
+        if ((this.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
             var response = JSON.parse(xhr.responseText);
             console.log(response);
         } else {

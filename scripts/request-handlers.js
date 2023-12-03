@@ -5,11 +5,13 @@ const options = require("./connectionOptions.json").database;
 const createUpdateUser = (req, res) => {
     var connection = mysql.createConnection(options);
     var sql;
-    var username = req.body.usernameR;
+    var username = req.query.usernameR;
     var mail = req.body.mailR;
     var password = req.body.passwordR;
     var passConfirmed = req.body.passConfirmedR;
 
+    console.log(username+' - '+mail )
+    
     if(req.method == "POST") {
         sql = mysql.format("INSERT INTO user(username, email, pass) VALUES ('?','?','?')", [username, mail, password]);
     } /*else {

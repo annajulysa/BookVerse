@@ -20,11 +20,11 @@ class Information {
 
     processingUser = (acao) => {
         var info = this;
-        //var id = document.getElementById("id").value;
+        var id = document.getElementById("id").value;
         var username = document.getElementById("usernameR").value;
         var mail = document.getElementById("mailR").value;
-        var pass = document.getElementById("passwordR");
-console.log(username, mail, pass);
+        var pass = document.getElementById("passwordR").value;
+        console.log(username, mail, pass);
         var person = {id:id, username: username, mail: mail, pass: pass};
 
         var xhr = new XMLHttpRequest();        
@@ -33,22 +33,12 @@ console.log(username, mail, pass);
         if (acao === "create") {
             xhr.onreadystatechange = function () {
                 if ((xhr.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
-                    var newUser = new User(username, mail, pass);
+                    var newUser = new User(xhr.response.insertId, username, mail, pass);
                     info.users.push(newUser);
-                    info.showPerson();
                 }
             }
             xhr.open("POST", "http://localhost:8081/user", true);
-        } /*else if (acao === "update") {
-            xhr.onreadystatechange = function () {
-                if ((xhr.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
-                    info.users.splice(info.users.findIndex(i => i.id == id), 1);
-                    info.users.push(person);
-                    info.showPerson();
-                }
-            }
-            xhr.open("PUT", "http://localhost:8081/user/"+ id, true);
-        }*/
+        }
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(person));
     }

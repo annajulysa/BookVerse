@@ -82,7 +82,7 @@
 		}
 	});
 
-	$('.owl-features').owlCarousel({
+	/*$('.owl-features').owlCarousel({
 		items:3,
 		loop:true,
 		dots: false,
@@ -143,7 +143,7 @@
 				  items:1
 			}
 		}
-	})
+	})*/
 
 	
 	

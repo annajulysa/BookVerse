@@ -7,6 +7,7 @@ class User {
     }
 };
 
+
 class Livros {
     constructor(id, title, obra, personagem, pagina, autor, genero) {
         this.id = id;
@@ -23,6 +24,7 @@ window.onload = (event) => {
     var info = new Information("divInformation");
     window.info = info;
 };
+
 
 class Information {
     constructor(id) {
@@ -73,8 +75,7 @@ class Information {
         var dados = {id:id, mail: mail, password: password};
     
         var xhr = new XMLHttpRequest();
-        xhr.responseType="json";        
-        
+        xhr.responseType="json";              
     
         xhr.onreadystatechange = function () {        
             if ((this.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
@@ -101,7 +102,7 @@ class Information {
             if ((this.readyState === 4) && (this.status === 200)) {
                 var response = JSON.parse(xhr.responseText);
                 response.data.forEach(function(current){
-                    livros.push(current);
+                livros.push(current);
                 });
             }
         };
@@ -112,17 +113,24 @@ class Information {
         this.getLivro();
 
         setTimeout(() => {
-            const listaLivrosElement = document.getElementById('listaLivros');
-            listaLivrosElement.innerHTML = '';
-            this.livros.forEach(livro => {
-                const livroElement = document.createElement('div');
-                livroElement.innerHTML = `<p>${livro.title} - ${livro.autor}</p>`;
-                listaLivrosElement.appendChild(livroElement);
-            });
-        }, 500);
+            // Get the container where you want to display the books
+            const livrosContainer = document.getElementById('listaLivros');
 
-        document.addEventListener('DOMContentLoaded', function () {
-            showLivros();
-        });
+            // Clear any existing content in the container
+            livrosContainer.innerHTML = '';
+
+            // Loop through the fetched books and create HTML elements to display them
+            this.livros.forEach(book => {
+                const bookElement = document.createElement('div');
+                bookElement.innerHTML = `
+                    <p>ID: ${book.id}</p>
+                    <p>Title: ${book.titulo}</p>
+                    <p>Autor: ${book.autor}</p>
+                    <p>Genero: ${book.livroGenero}</p>
+                    <hr>
+                `;
+                livrosContainer.appendChild(bookElement);
+            });
+        }, 1000);
     };
 }

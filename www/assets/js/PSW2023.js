@@ -187,7 +187,7 @@ class Information {
     getDetalheLivro = (idLivro) => {
         var info = this;
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/livro/" + idLivro, true);
+        xhr.open("GET", "/detalhelivro/" + idLivro, true);
         xhr.onload = function () {
             if (xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);

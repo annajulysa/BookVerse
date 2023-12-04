@@ -87,7 +87,7 @@ const getLivros = (req, res) => {
 module.exports.getLivros = getLivros;
 
 
-const getLivro = (req, res) => {
+const getDetalhesLivro = (req, res) => {
     var idLivro = req.params.id;
 
     var connection = mysql.createConnection(options);
@@ -110,7 +110,7 @@ const getLivro = (req, res) => {
         }
     }); 
 }
-module.exports.getLivro = getLivro;
+module.exports.getDetalhesLivro = getDetalhesLivro;
 
 const adicionarBiblioteca = (req, res) => {
 

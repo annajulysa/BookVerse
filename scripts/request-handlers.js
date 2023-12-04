@@ -14,13 +14,14 @@ const registarUser = (req, res) => {
         sql = mysql.format("INSERT INTO user(username, email, pass) VALUES (?,?,?)", [username, email, password]);
     }
     connection.query(sql,function (err, rows, fields) {
+        connection.end(); 
+
         if (err) {
             res.sendStatus(404);
         } else {
             res.send(rows);
         }
-    });
-    connection.end();    
+    });       
 }
 module.exports.registarUser = registarUser;
 
@@ -74,6 +75,8 @@ const getLivros = (req, res) => {
     });
     var query = mysql.format("SELECT l.idLivro, l.titulo, l.autor, l.imagem, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero");
     connection.query(query, function (err, rows) {
+        connection.end(); 
+
         if (err) {
             res.json({"message": "Erro" });
         } else {
@@ -84,7 +87,9 @@ const getLivros = (req, res) => {
 module.exports.getLivros = getLivros;
 
 
-const getLivro = () => {
+const getLivro = (req, res) => {
+    var idLivro = req.params.id;
+
     var connection = mysql.createConnection(options);
     connection.connect(function (err) {
         if (err) {
@@ -94,17 +99,23 @@ const getLivro = () => {
             console.log('Estado da conexão após conectar:', connection.state);
         }
     });
-    var query = mysql.format("SELECT * FROM livro");
+    var query = mysql.format("SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero WHERE idLivro=?", idLivro);
     connection.query(query, function (err, rows) {
-        if (err) {
+        connection.end(); 
+
+        if (err) {            
             res.json({"message": "Erro" });
-        } else {
+        } else {            
             res.json({"message": "OK", "data": rows });
         }
     }); 
 }
 module.exports.getLivro = getLivro;
 
+const adicionarBiblioteca = (req, res) => {
+
+}
+module.exports.adicionarBiblioteca = adicionarBiblioteca;
 
 
 
@@ -112,18 +123,17 @@ module.exports.getLivro = getLivro;
 
 
 
-
-const atualizarUser = () => {
+const atualizarUser = (req, res) => {
 
 }
 module.exports.atualizarUser = atualizarUser;
 
-const removerLivro = () => {
+const removerLivro = (req, res) => {
 
 }
 module.exports.removerLivro = removerLivro;
 
-const getLivrosUser = () => {
+const getLivrosUser = (req, res) => {
 
 }
 module.exports.getLivrosUser = getLivrosUser;

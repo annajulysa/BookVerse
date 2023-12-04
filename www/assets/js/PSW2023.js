@@ -7,19 +7,27 @@ class User {
     }
 };
 
-
-class Livros {
-    constructor(idLivro, titulo, obra, personagem, pagina, autor, livroGenero, imagem) {
+class Livro {
+    constructor(idLivro, titulo, obra, personagem, pagina, autor, idGenero, livroGenero, imagem, gostos) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.obra = obra;
         this.personagem = personagem;
         this.pagina = pagina;
         this.autor = autor;
+        this.idGenero = idGenero;
         this.livroGenero = livroGenero;
         this.imagem = imagem;
+        this.gostos = gostos;
     }
 };
+
+class LivroUser {
+    constructor(idLivro, idUser) {
+        this.idLivro = idLivro;
+        this.idUser = idUser;
+    }
+}
 
 window.onload = (event) => {
     var info = new Information("divInformation");
@@ -33,6 +41,7 @@ class Information {
         this.id = id;
         this.users = [];
         this.livros = [];
+        this.userLivro = [];
     }
 
     // feito
@@ -85,7 +94,7 @@ class Information {
                 if (this.status === 200) {
                     console.log("Resposta completa do servidor:", xhr.response);
         
-                    // Certifique-se de que a resposta é um array válido antes de acessar o índice '0'
+                    // verificar se a resposta é um array
                     if (xhr.response && xhr.response.length > 0) {
                         var responseData = xhr.response[0];
                         var response = new User(responseData.idUser, responseData.username, responseData.email, responseData.pass);
@@ -109,7 +118,7 @@ class Information {
     }
 
     //feito
-    getLivro = () => {
+    getLivros = () => {
         return new Promise((resolve, reject) => {
             var livros = this.livros;
             var xhr = new XMLHttpRequest();
@@ -129,7 +138,7 @@ class Information {
 
     //feito
     showLivros = () => {
-        this.getLivro().then(() => {
+        this.getLivros().then(() => {
             const livrosContainer = document.getElementById('listaLivros');
             var livros = this.livros;
             //4 livros por cada row
@@ -160,10 +169,10 @@ class Information {
                                 </div>
                             </div>
                             <div class="down-content">
-                            <a href="details.html">             
-                                <span><i class="fa fa-check"></i> ${livro.autor}</span>
-                                <h4>${livro.titulo}</h4>
-                            </a>
+                                <a href="javascript: info.getDetalheLivro(${livro.idLivro});">             
+                                    <span><i class="fa fa-check"></i> ${livro.autor}</span>
+                                    <h4 id="xpto">${livro.titulo}</h4>
+                                </a>
                             </div>
                         </div>
                     `;
@@ -171,11 +180,81 @@ class Information {
                 }
                 livrosContainer.appendChild(row);
             }
-
         });        
     };
 
-    showDetalheLivro = () => {
-
+    //feito
+    getDetalheLivro = (idLivro) => {
+        var info = this;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/livro/" + idLivro, true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+    
+                if (response.data.length > 0) {
+                    var responseData = response.data[0];
+                    var livro = new Livro(responseData.idLivro, responseData.titulo, responseData.obra, responseData.personagem, responseData.pagina, responseData.autor, responseData.livroGenero, responseData.imagem);
+                    info.livros.push(livro);
+                    info.showDetalheLivro(livro.idLivro);
+                }
+            } else {
+                console.error("Erro na solicitação. Status:", xhr.status);
+            }
+        };
+        xhr.send();
     }
+
+    showDetalheLivro = (idLivro) => {
+        var livro = info.livros.find(l => l.idLivro === idLivro);
+
+        // Verificar se o livro foi encontrado
+        try {
+            // Redirecionar para a página de detalhes antes de atualizar os elementos
+            window.location.href = 'details.html?idLivro=' + livro.idLivro;
+
+            // Atualizar os elementos na página de detalhes com as informações do livro
+            var gostos = document.getElementById('gostosDL');
+            var autor = document.getElementById('autorDL');
+            var paginas = document.getElementById('paginasDL');
+            var genero = document.getElementById('generoDL');
+            var imagem = document.getElementById('imagemDL');
+            var titulo = document.getElementById('tituloDL');
+            var personagem = document.getElementById('personagemDL');
+            var obra = document.getElementById('obraDL');
+
+            // Certifique-se de que a propriedade 'pagina' existe no seu objeto livro
+            // Caso contrário, substitua pelo nome correto da propriedade
+            paginas.innerHTML = livro.pagina || '';
+
+            // Atualizar os outros elementos
+            titulo.innerText = livro.titulo;
+            autor.innerText = livro.autor;
+            genero.innerHTML = livro.livroGenero;
+            imagem.innerHTML = livro.imagem;
+            personagem.innerHTML = livro.personagem;
+            obra.innerHTML = livro.obra;
+
+        } catch (error) {
+            console.error(error);
+        }       
+    }
+
+    /*adicionarBiblioteca = (idLivro) => {
+        var info = this;
+        var id = document.getElementById("id").value;
+        var dados = {id:id, idLivro:idLivro};
+
+        var xhr = new XMLHttpRequest();        
+        xhr.responseType="json";
+        xhr.onreadystatechange = function () {
+            if ((xhr.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
+                var newLivro = new LivroUser();
+                info.users.push(newLivro);
+                this.showLivros();
+            }
+        }
+        xhr.open("POST", "/adicionar", true);
+
+    }*/
 }

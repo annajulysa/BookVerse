@@ -46,7 +46,8 @@ INSERT INTO user(username, email, pass) VALUES ('Pedro Conceição', 'pedro@gmai
 INSERT INTO user(username, email, pass) VALUES ('Diogo Oliveira', 'diogo@gmail.com', '123');
 INSERT INTO user(username, email, pass) VALUES ('Sogia Marques', 'sofi@gmail.com', '456sofi');
 Select * from user;
-SELECT email, pass FROM user WHERE email='anna@gmail.com' and pass='anna';
+SELECT * FROM user WHERE email='pedro@gmail.com' and pass='p123';
+
 
 INSERT INTO genero(designacao) VALUES ('Romance');
 INSERT INTO genero(designacao) VALUES ('Humor');
@@ -80,6 +81,7 @@ INSERT INTO livro(titulo, obra, personagem, pagina, autor, genero, imagem) VALUE
 SELECT * FROM livro;
 SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero;
 SELECT l.idLivro, l.titulo, l.autor, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero;
+SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero WHERE idLivro='1';
 
 INSERT INTO Livro_User(idLivro, idUser) VALUES (1, 1);
 INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 1);

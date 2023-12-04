@@ -19,6 +19,8 @@ app.use(express.static("www"));
 app.post("/logins", requestHandlers.validaLogin);
 app.post("/registars", requestHandlers.registarUser); 
 app.get("/livros", requestHandlers.getLivros); // apresentar todos os livros da bd
+app.get("/livros/:id", requestHandlers.getLivro); // apresentar os detalhes do livro
+
 app.put("/utilizador/:id", requestHandlers.atualizarUser); //atualizar no no user
 app.get("/utilizador/:id/livros/:id", requestHandlers.getLivrosUser); //apresentar todos os livros da minha biblioteca
 app.delete("/utilizador/:id/livros/:id", requestHandlers.removerLivro); // remover livro da minha biblioteca

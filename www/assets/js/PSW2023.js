@@ -9,20 +9,21 @@ class User {
 
 
 class Livros {
-    constructor(idLivro, titulo, obra, personagem, pagina, autor, genero, imagem) {
+    constructor(idLivro, titulo, obra, personagem, pagina, autor, livroGenero, imagem) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.obra = obra;
         this.personagem = personagem;
         this.pagina = pagina;
         this.autor = autor;
-        this.genero = genero;
+        this.livroGenero = livroGenero;
         this.imagem = imagem;
     }
 };
 
 window.onload = (event) => {
     var info = new Information("divInformation");
+    info.showLivros();
     window.info = info;
 };
 
@@ -68,7 +69,7 @@ class Information {
         }                
     }
 
-    //validar login
+    //feito
     processingLogin() {
         var info = this;
         var id = document.getElementById("idLogin").value;
@@ -107,63 +108,74 @@ class Information {
         xhr.send(JSON.stringify(dados));   
     }
 
+    //feito
     getLivro = () => {
-        var livros = this.livros;
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/livros", true);
-        xhr.onreadystatechange = function () {
-            if ((this.readyState === 4) && (this.status === 200)) {
-                var response = JSON.parse(xhr.responseText);
-                response.data.forEach(function(current){
-                livros.push(current);                
-                });
-            }
-        };
-        xhr.send();
+        return new Promise((resolve, reject) => {
+            var livros = this.livros;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/livros", true);
+            xhr.onreadystatechange = function () {
+                if ((this.readyState === 4) && (this.status === 200)) {
+                    var response = JSON.parse(xhr.responseText);
+                    response.data.forEach(function (current) {
+                        livros.push(current);
+                    });
+                    resolve();
+                }
+            };
+            xhr.send();
+        });
     };
 
+    //feito
     showLivros = () => {
-        this.getLivro();
+        this.getLivro().then(() => {
+            const livrosContainer = document.getElementById('listaLivros');
+            var livros = this.livros;
+            //4 livros por cada row
+            for (let i = 0; i < this.livros.length; i += 4) {
+                const row = document.createElement('div');
+                row.className = 'row';
 
-        const livrosContainer = document.getElementById('listaLivros');
+                for (let j=i; j < i+4 && j < livros.length; j++) {
+                    const livro = livros[j];
 
-        //4 livros por cada row
-        for (let i = 0; i < info.livros.length; i += 4) {
-            const row = document.createElement('div');
-            row.className = 'row';
+                    const livroElement = document.createElement('div');
+                    livroElement.className = 'col-lg-3 col-sm-6';
 
-            for (let j=i; j < i+4 && j < livros.length; j++) {
-                const livro = livros[j];
-
-                const livroElement = document.createElement('div');
-                livroElement.className = 'col-lg-3 col-sm-6';
-
-                livroElement.innerHTML = `
-                    <div class="item">
-                        <div class="thumb">
-                            <img src="assets/images/${livro.imagem}" alt="">
-                            <div class="hover-effect">
-                                <div class="content">
-                                    <div class="live">
-                                        <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); color: #fff; font-size: 14px;
-                                        padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;">
+                    livroElement.innerHTML = `
+                        <div class="item">
+                            <div class="thumb">
+                                <img src="assets/images/${livro.imagem}" alt="">
+                                <div class="hover-effect">
+                                    <div class="content">
+                                        <div class="live">
+                                            <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); color: #fff; font-size: 14px;
+                                            padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;">
+                                        </div>
+                                        <ul>
+                                            <li><a href="#"><i class="fa fa-book"></i> ${livro.livroGenero}</a></li>
+                                        </ul>
                                     </div>
-                                    <ul>
-                                        <li><a href="#"><i class="fa fa-book"></i> ${livro.genero}</a></li>
-                                    </ul>
                                 </div>
                             </div>
+                            <div class="down-content">
+                            <a href="details.html">             
+                                <span><i class="fa fa-check"></i> ${livro.autor}</span>
+                                <h4>${livro.titulo}</h4>
+                            </a>
+                            </div>
                         </div>
-                        <div class="down-content">
-                            <span><i class="fa fa-check"></i> ${livro.autor}</span>
-                            <h4>${livro.titulo}</h4>
-                        </div>
-                    </div>
-                `;
-
-                row.appendChild(livroElement);
+                    `;
+                    row.appendChild(livroElement);
+                }
+                livrosContainer.appendChild(row);
             }
-            livrosContainer.appendChild(row);
-        }
+
+        });        
     };
+
+    showDetalheLivro = () => {
+
+    }
 }

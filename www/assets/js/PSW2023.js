@@ -1,17 +1,17 @@
 class User {
-    constructor(id, username, mail, pass) {
-        this.id = id;
+    constructor(idUser, username, eemail, pass) {
+        this.idUser = idUser;
         this.username = username;
-        this.mail = mail;
+        this.eemail = eemail;
         this.pass = pass;
     }
 };
 
 
 class Livros {
-    constructor(id, title, obra, personagem, pagina, autor, genero) {
-        this.id = id;
-        this.title = title;
+    constructor(idLivro, titulo, obra, personagem, pagina, autor, genero, imagem) {
+        this.idLivro = idLivro;
+        this.titulo = titulo;
         this.obra = obra;
         this.personagem = personagem;
         this.pagina = pagina;
@@ -39,11 +39,11 @@ class Information {
         var info = this;
         var id = document.getElementById("id").value;
         var username = document.getElementById("usernameR").value;
-        var mail = document.getElementById("mailR").value;
+        var email = document.getElementById("emailR").value;
         var pass = document.getElementById("passwordR").value;
         var passconf = document.getElementById("passConfirmedR").value;
         
-        var person = {id:id, username: username, mail: mail, pass: pass};
+        var person = {id:id, username: username, email: email, pass: pass};
 
         if(pass === passconf)
         {
@@ -53,7 +53,7 @@ class Information {
             if (acao === "create") {
                 xhr.onreadystatechange = function () {
                     if ((xhr.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
-                        var newUser = new User(xhr.response.insertId, username, mail, pass);
+                        var newUser = new User(xhr.response.insertId, username, email, pass);
                         info.users.push(newUser);
                         window.location.href = 'index.html';
                         this.showLivros();
@@ -72,17 +72,18 @@ class Information {
     processingLogin() {
         var info = this;
         var id = document.getElementById("idLogin").value;
-        var mail = document.getElementById("mailL").value;
+        var email = document.getElementById("emailL").value;
         var password = document.getElementById("passwordL").value;    
-        var dados = {id:id, mail: mail, password: password};
+        var dados = {id:id, email: email, password: password};
     
         var xhr = new XMLHttpRequest();
         xhr.responseType="json";              
     
         xhr.onreadystatechange = function () {        
             if ((this.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
-                var response = new User(xhr.response.insertId, mail, password);
+                var response = new User(xhr.response.insertId, email, password);
                 info.users.push(response);
+                console.log(response.idU)
                 window.location.href = 'index.html';
                 this.showLivros();
             } else {

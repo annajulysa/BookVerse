@@ -113,10 +113,25 @@ const getDetalhesLivro = (req, res) => {
 module.exports.getDetalhesLivro = getDetalhesLivro;
 
 const adicionarBiblioteca = (req, res) => {
+    var connection = mysql.createConnection(options);
+    var sql;
+    var idLivro = req.body.idLivro;
+    var idUser = req.body.idUser;
+    
+    if(req.method == "POST") {
+        sql = mysql.format("INSERT INTO Livro_User(idLivro, idUser) VALUES (?,?)", [idLivro, idUser]);
+    }
+    connection.query(sql,function (err, rows, fields) {
+        connection.end(); 
 
+        if (err) {
+            res.sendStatus(404);
+        } else {
+            res.send(rows);
+        }
+    });  
 }
 module.exports.adicionarBiblioteca = adicionarBiblioteca;
-
 
 
 

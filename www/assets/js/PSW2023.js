@@ -65,8 +65,7 @@ class Information {
                     if ((xhr.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
                         var newUser = new User(xhr.response.insertId, username, email, pass);
                         info.users.push(newUser);
-                        window.location.href = 'index.html';
-                        this.showLivros();
+                        window.location.href = 'signin.html';
                     }
                 }
                 xhr.open("POST", "/registars", true);
@@ -100,6 +99,9 @@ class Information {
                         var response = new User(responseData.idUser, responseData.username, responseData.email, responseData.pass);
                         info.users.push(response);
                         console.log(response.idUser);
+
+                        localStorage.setItem('idUser', response.idUser);
+
                         window.location.href = 'index.html';
                     } else {
                         console.error("Erro: A resposta do servidor está vazia ou não está no formato esperado.");
@@ -160,7 +162,7 @@ class Information {
                                     <div class="content">
                                         <div class="live">
                                             <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); color: #fff; font-size: 14px;
-                                            padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;">
+                                            padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;" onclick="javascript: info.adicionarBiblioteca(${livro.idLivro});">
                                         </div>
                                         <ul>
                                             <li><a href="#"><i class="fa fa-book"></i> ${livro.livroGenero}</a></li>
@@ -225,7 +227,7 @@ class Information {
 
             // Certifique-se de que a propriedade 'pagina' existe no seu objeto livro
             // Caso contrário, substitua pelo nome correto da propriedade
-            paginas.innerHTML = livro.pagina || '';
+            paginas.innerHTML = livro.pagina;
 
             // Atualizar os outros elementos
             titulo.innerText = livro.titulo;
@@ -240,21 +242,30 @@ class Information {
         }       
     }
 
-    /*adicionarBiblioteca = (idLivro) => {
+    //feito
+    adicionarBiblioteca = (idLivro) => {
         var info = this;
-        var id = document.getElementById("id").value;
-        var dados = {id:id, idLivro:idLivro};
+        var idUser = localStorage.getItem('idUser');
+        var dados = {idLivro:idLivro, idUser: idUser};
 
         var xhr = new XMLHttpRequest();        
         xhr.responseType="json";
         xhr.onreadystatechange = function () {
             if ((xhr.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
-                var newLivro = new LivroUser();
-                info.users.push(newLivro);
-                this.showLivros();
+                var response = new LivroUser(idLivro, idUser);
+                info.userLivro.push(response);
             }
         }
         xhr.open("POST", "/adicionar", true);
 
-    }*/
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(dados));
+    }
+
+    processingProfile = () => {
+        var idUser = localStorage.getItem('idUser');
+        var user = info.users.find(s => s.idUser === idUser);
+
+
+    } 
 }

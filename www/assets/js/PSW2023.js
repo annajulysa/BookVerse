@@ -1,8 +1,8 @@
 class User {
-    constructor(idUser, username, eemail, pass) {
+    constructor(idUser, username, email, pass) {
         this.idUser = idUser;
         this.username = username;
-        this.eemail = eemail;
+        this.email = email;
         this.pass = pass;
     }
 };
@@ -59,7 +59,7 @@ class Information {
                         this.showLivros();
                     }
                 }
-                xhr.open("POST", "/registar", true);
+                xhr.open("POST", "/registars", true);
             }
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(person));
@@ -73,28 +73,38 @@ class Information {
         var info = this;
         var id = document.getElementById("idLogin").value;
         var email = document.getElementById("emailL").value;
-        var password = document.getElementById("passwordL").value;    
-        var dados = {id:id, email: email, password: password};
+        var pass = document.getElementById("passwordL").value;    
+        var dados = {id:id, email: email, pass: pass};
     
         var xhr = new XMLHttpRequest();
         xhr.responseType="json";              
     
         xhr.onreadystatechange = function () {        
-            if ((this.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
-                var response = new User(xhr.response.insertId, email, password);
-                info.users.push(response);
-                console.log(response.idU)
-                window.location.href = 'index.html';
-                this.showLivros();
-            } else {
-                console.error("Erro durante a solicitação:", xhr.status, xhr.statusText);
-            }        
-        };
-        xhr.open("POST", "/logins", true); 
-    
+            if (this.readyState == XMLHttpRequest.DONE) {
+                if (this.status === 200) {
+                    console.log("Resposta completa do servidor:", xhr.response);
+        
+                    // Certifique-se de que a resposta é um array válido antes de acessar o índice '0'
+                    if (xhr.response && xhr.response.length > 0) {
+                        var responseData = xhr.response[0];
+                        var response = new User(responseData.idUser, responseData.username, responseData.email, responseData.pass);
+                        info.users.push(response);
+                        console.log(response.idUser);
+                        window.location.href = 'index.html';
+                    } else {
+                        console.error("Erro: A resposta do servidor está vazia ou não está no formato esperado.");
+                    }
+                } else {
+                    alert("Dados de utilizador invalido.");
+                    console.error("Erro durante a solicitação. Código: " + this.status);
+                    console.error("Mensagem de erro do servidor: " + xhr.responseText);
+                }
+            }              
+        }
+        xhr.open("POST", "/logins", true);    
+
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(dados));        
-                
+        xhr.send(JSON.stringify(dados));   
     }
 
     getLivro = () => {

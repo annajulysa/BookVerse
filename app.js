@@ -17,7 +17,7 @@ app.use(express.static("www"));
 
 // routing
 app.post("/logins", requestHandlers.validaLogin);
-app.post("/registar", requestHandlers.registarUser); 
+app.post("/registars", requestHandlers.registarUser); 
 app.get("/livros", requestHandlers.getLivros); // apresentar todos os livros da bd
 app.put("/utilizador/:id", requestHandlers.atualizarUser); //atualizar no no user
 app.get("/utilizador/:id/livros/:id", requestHandlers.getLivrosUser); //apresentar todos os livros da minha biblioteca

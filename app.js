@@ -16,9 +16,11 @@ app.use(express.static("www"));
 
 
 // routing
-app.post("/logins", requestHandlers.getUser);
-app.post("/registar", requestHandlers.createUpdateUser);
-app.get("/livros", requestHandlers.getLivros)
+app.post("/logins", requestHandlers.validaLogin);
+app.post("/registar", requestHandlers.registarUser);
+app.get("/livros", requestHandlers.getLivros);
+//app.put("/utilizador/:id", requestHandlers.createUpdatePerson);
+//app.delete("/utilizador/livros/:id", requestHandlers.removePerson);
 
 
 // start server

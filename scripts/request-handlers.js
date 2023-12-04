@@ -3,13 +3,12 @@ const mysql = require("mysql");
 const options = require("./connectionOptions.json").database;
 
 
-const createUpdateUser = (req, res) => {
+const registarUser = (req, res) => {
     var connection = mysql.createConnection(options);
     var sql;
     var username = req.body.username;
     var mail = req.body.mail;
     var password = req.body.pass;
-    var passConfirmed = req.body.passConfirmed;
     
     if(req.method == "POST") {
         sql = mysql.format("INSERT INTO user(username, email, pass) VALUES (?,?,?)", [username, mail, password]);
@@ -23,10 +22,10 @@ const createUpdateUser = (req, res) => {
     });
     connection.end();    
 }
-module.exports.createUpdateUser = createUpdateUser;
+module.exports.registarUser = registarUser;
 
 
-const getUser = (req, res) => {
+const validaLogin = (req, res) => {
     var mail = req.body.mail;
     var password = req.body.password;
 
@@ -40,7 +39,7 @@ const getUser = (req, res) => {
         }
     });
 
-    var query = mysql.format("SELECT email, pass FROM user WHERE email=? and pass=?", [mail, password]);
+    var query = mysql.format("SELECT * FROM user WHERE email=? and pass=?", [mail, password]);
     connection.query(query, function (err, rows) {
         if (err) {
             res.sendStatus(404);
@@ -50,7 +49,7 @@ const getUser = (req, res) => {
     });    
     connection.end();  
 }
-module.exports.getUser = getUser;
+module.exports.validaLogin = validaLogin;
 
 
 const getLivros = (req, res) => {

@@ -17,6 +17,7 @@ class Livros {
         this.pagina = pagina;
         this.autor = autor;
         this.genero = genero;
+        this.imagem = imagem;
     }
 };
 
@@ -55,6 +56,7 @@ class Information {
                         var newUser = new User(xhr.response.insertId, username, mail, pass);
                         info.users.push(newUser);
                         window.location.href = 'index.html';
+                        this.showLivros();
                     }
                 }
                 xhr.open("POST", "/registar", true);
@@ -82,7 +84,7 @@ class Information {
                 var response = new User(xhr.response.insertId, mail, password);
                 info.users.push(response);
                 window.location.href = 'index.html';
-                console.log(response.mail);
+                this.showLivros();
             } else {
                 console.error("Erro durante a solicitação:", xhr.status, xhr.statusText);
             }        
@@ -102,7 +104,7 @@ class Information {
             if ((this.readyState === 4) && (this.status === 200)) {
                 var response = JSON.parse(xhr.responseText);
                 response.data.forEach(function(current){
-                livros.push(current);
+                livros.push(current);                
                 });
             }
         };
@@ -112,25 +114,45 @@ class Information {
     showLivros = () => {
         this.getLivro();
 
-        setTimeout(() => {
-            // Get the container where you want to display the books
-            const livrosContainer = document.getElementById('listaLivros');
+        const livrosContainer = document.getElementById('listaLivros');
 
-            // Clear any existing content in the container
-            livrosContainer.innerHTML = '';
+        //4 livros por cada row
+        for (let i = 0; i < info.livros.length; i += 4) {
+            const row = document.createElement('div');
+            row.className = 'row';
 
-            // Loop through the fetched books and create HTML elements to display them
-            this.livros.forEach(book => {
-                const bookElement = document.createElement('div');
-                bookElement.innerHTML = `
-                    <p>ID: ${book.id}</p>
-                    <p>Title: ${book.titulo}</p>
-                    <p>Autor: ${book.autor}</p>
-                    <p>Genero: ${book.livroGenero}</p>
-                    <hr>
+            for (let j=i; j < i+4 && j < livros.length; j++) {
+                const livro = livros[j];
+
+                const livroElement = document.createElement('div');
+                livroElement.className = 'col-lg-3 col-sm-6';
+
+                livroElement.innerHTML = `
+                    <div class="item">
+                        <div class="thumb">
+                            <img src="assets/images/${livro.imagem}" alt="">
+                            <div class="hover-effect">
+                                <div class="content">
+                                    <div class="live">
+                                        <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); color: #fff; font-size: 14px;
+                                        padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;">
+                                    </div>
+                                    <ul>
+                                        <li><a href="#"><i class="fa fa-book"></i> ${livro.genero}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="down-content">
+                            <span><i class="fa fa-check"></i> ${livro.autor}</span>
+                            <h4>${livro.titulo}</h4>
+                        </div>
+                    </div>
                 `;
-                livrosContainer.appendChild(bookElement);
-            });
-        }, 1000);
+
+                row.appendChild(livroElement);
+            }
+            livrosContainer.appendChild(row);
+        }
     };
 }

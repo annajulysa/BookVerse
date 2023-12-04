@@ -17,10 +17,11 @@ app.use(express.static("www"));
 
 // routing
 app.post("/logins", requestHandlers.validaLogin);
-app.post("/registar", requestHandlers.registarUser);
-app.get("/livros", requestHandlers.getLivros);
-//app.put("/utilizador/:id", requestHandlers.createUpdatePerson);
-//app.delete("/utilizador/livros/:id", requestHandlers.removePerson);
+app.post("/registar", requestHandlers.registarUser); 
+app.get("/livros", requestHandlers.getLivros); // apresentar todos os livros da bd
+app.put("/utilizador/:id", requestHandlers.atualizarUser); //atualizar no no user
+app.get("/utilizador/:id/livros/:id", requestHandlers.getLivrosUser); //apresentar todos os livros da minha biblioteca
+app.delete("/utilizador/:id/livros/:id", requestHandlers.removerLivro); // remover livro da minha biblioteca
 
 
 // start server

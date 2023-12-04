@@ -72,3 +72,19 @@ const getLivros = (req, res) => {
     }); 
 }
 module.exports.getLivros = getLivros;
+
+const atualizarUser = () => {
+
+}
+module.exports.atualizarUser = atualizarUser;
+
+const removerLivro = () => {
+
+}
+module.exports.removerLivro = removerLivro;
+
+const getLivrosUser = () => {
+
+}
+module.exports.getLivrosUser = getLivrosUser;
+

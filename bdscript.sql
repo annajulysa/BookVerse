@@ -99,10 +99,16 @@ SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.
 SELECT l.idLivro, l.titulo, l.autor, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero;
 SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero WHERE idLivro='1';
 SELECT U.idUser, U.username, U.email, LU.idLivro, L.titulo, L.autor, G.designacao as 'livroGenero' FROM Livro_User LU JOIN User U ON LU.idUser = U.idUser JOIN Livro L ON LU.idLivro = L.idLivro JOIN Genero G ON L.genero = G.idGenero where u.iduser = 1;
-SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicoes' FROM Livro 
+SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicionados' FROM Livro 
 	JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro
 	GROUP BY Livro.idLivro, Livro.titulo
 	ORDER BY totalAdicoes DESC;
     
 SELECT * FROM Livro_User;
+DELETE FROM Livro_User WHERE idUser = 3 AND idLivro = 6;
 
+SELECT L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao AS livroGenero, L.imagem FROM  Livro L
+JOIN Livro_User LU ON L.idLivro = LU.idLivro
+JOIN Genero G ON L.genero = G.idGenero
+WHERE LU.idUser = 3
+GROUP BY L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao, L.imagem;

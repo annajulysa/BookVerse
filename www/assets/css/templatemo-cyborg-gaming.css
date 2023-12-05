@@ -70,6 +70,17 @@ figure, header, nav, section, article, aside, footer, figcaption {
   letter-spacing: 2px;
   justify-content: space-around;
 }
+.btnRemover {  
+  border: none;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: #394077;
+  color: #fff;
+  text-transform: uppercase;
+  justify-content: space-around;
+}
 
 html[xmlns] .clearfix {
   display: block;
@@ -925,15 +936,15 @@ Gaming Library Style
 
 .gaming-library .item ul li {
   display: inline-block;
-  width: 33.33%;
+  width: 24.33%;
 }
 
 .gaming-library .item ul li:first-child {
-  width: 110px;
+  width: 140px;
 }
 
 .gaming-library .item ul li:last-child {
-  width: 15%;
+  width: 0%;
   text-align: right;
 }
 

@@ -23,23 +23,13 @@ class Livro {
 };
 
 class LivroUser{
-    constructor(idLivro, idUser) {
+    constructor(idLivro, idUser, titulo, autor, livroGenero, imagem) {
         this.idLivro = idLivro;
         this.idUser = idUser;
-    }
-}
-
-class Perfil {
-    constructor(idLivro, username, email, idUser, titulo, autor, imagem, livroGenero,qtdLiros) {
-        this.idLivro = idLivro;
-        this.idUser = idUser;
-        this.username = username;
-        this.email = email;
         this.titulo = titulo;
         this.autor = autor;
-        this.imagem = imagem;
         this.livroGenero = livroGenero;
-        this.qtdLiros = qtdLiros;
+        this.imagem = imagem;
     }
 }
 
@@ -55,8 +45,7 @@ class Information {
         this.id = id;
         this.users = [];
         this.livros = [];
-        this.perfils = [];
-        this.userLivro = [];
+        this.userLivros = [];
         this.detalhes = [];
         this.rankings = [];
     }
@@ -280,6 +269,7 @@ class Information {
         livrosContainer.appendChild(row);
     };
 
+
     //feito
     adicionarBiblioteca = (idLivro) => {
         var info = this;
@@ -301,103 +291,109 @@ class Information {
     };
 
     processingProfile = () => {
-       /* var idUser = localStorage.getItem('idUser');
-        var usernameElement = document.getElementById('usernameP');
-        var usernameElement = document.getElementById('qtdLivrosSalvos');
+        var idUser = localStorage.getItem('idUser');
+        document.getElementById("usernameP").textContent = "tata";
 
+    };
     
-        console.log("Iniciando solicitação para o perfil do usuário com ID:", idUser);
-    
+    //feito
+    getMinhaBiblioteca = () => {
+        var userLivros = this.userLivros;
+        var idUser = localStorage.getItem('idUser');
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/utilizador/" + idUser, true);
         xhr.onreadystatechange = function () {
-            console.log("Estado da solicitação:", xhr.readyState);
-            if (xhr.readyState === 4) {
-                console.log("Resposta completa do servidor:", xhr.responseText);
+            if ((this.readyState === 4) && (this.status === 200)) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.data && Array.isArray(response.data)) {
+                    userLivros.length = 0;
+
+                    // Adiciona os novos itens ao array
+                    response.data.forEach(function (current) {
+                        userLivros.push(current);
+                    });
     
-                if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-    
-                    if (response.data.length > 0) {
-                        var responseData = response.data[0];
-                        var perfil = new Perfil(
-                            responseData.idUser,
-                            responseData.username,
-                            responseData.email,
-                            responseData.idLivro,
-                            responseData.titulo,
-                            responseData.autor,
-                            responseData.autor,
-                            responseData.imagem,
-                            responseData.livroGenero
-                        );
-    
-                        console.log("Perfil obtido com sucesso:", perfil);
-    
-                        // Atualize a interface do usuário com as informações do perfil
-                        usernameElement.innerHTML = perfil.username;
+                    // Chame a função de callback para mostrar os dados após o carregamento
+                    if (info.getMinhaBibliotecaCallback) {
+                        info.getMinhaBibliotecaCallback();
                     }
-                } else {
-                    console.error("Erro na solicitação. Status:", xhr.status);
                 }
             }
         };
-        xhr.send();*/
+        xhr.send();
     };
-    
-    
-    /*showMinhaBiblioteca = async () => {
-        try {
-            // Aguarde a conclusão do processamento do perfil
-            const perfil = await this.processingProfile();
-    
-            const livrosContainer = document.getElementById('minhaBibliot');
-            var livros = this.livros;
-    
-            for (let i = 0; i < livros.length; i++) {
-                const livro = livros[i];
-    
+
+    //feito
+    showMinhaBiblioteca = () => {
+        var userLivros = this.userLivros;
+        const livrosContainer = document.getElementById('minhaBibliot');  
+
+        livrosContainer.innerHTML = '';
+
+        if (userLivros.length > 0) {
+            userLivros.forEach(function (livro) {
+                
                 const livroElement = document.createElement('div');
                 livroElement.className = 'item';
-    
+
                 livroElement.innerHTML = `
                     <ul>
                         <li><img src="assets/images/${livro.imagem}" alt="" class="templatemo-item"></li>
                         <li><h4>${livro.titulo}</h4><span>${livro.autor}</span></li>
                         <li><h4>Data Adicionada</h4><span>24/08/2036</span></li>
                         <li><h4>Gênero</h4><span>${livro.livroGenero}</span></li>
-                        <li><h4>Perfil</h4><span>${perfil ? perfil.username : 'N/A'}</span></li>                
+                        <li><input type="submit" value="Remover" class="btnRemover" onclick="info.removeLivro(${livro.idLivro})"/></li>            
                     </ul>
                 `;
+
+                // Adiciona o elemento de lista ao container
                 livrosContainer.appendChild(livroElement);
-            }
-        } catch (error) {
-            console.error(error);
+
+            });
+        } else {
+            // Adiciona uma mensagem se não houver livros na biblioteca
+            livrosContainer.innerHTML = '<p>Nenhum livro na biblioteca.</p>';
         }
-    };*/
+    };
+
+    //feito
+    removeLivro = (idLivro) => {
+        var idUser = localStorage.getItem('idUser');
+        var info = this;
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", "/utilizador/"+ idUser +"/livros/"+ idLivro, true);
+        xhr.onreadystatechange = function () {
+            if ((this.readyState === 4) && (this.status === 200)) {
+                info.userLivros.splice(info.userLivros.findIndex(i => i.idLivro == idLivro), 1);
+                info.showMinhaBiblioteca();
+            }
+        };
+        xhr.send();
+    }
 
     //feito
     rankingLivros = () => {
         var rankings = this.rankings;
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/ranking", true);
-    xhr.onreadystatechange = function () {
-        if ((this.readyState === 4) && (this.status === 200)) {
-            var response = JSON.parse(xhr.responseText);
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/ranking", true);
+        xhr.onreadystatechange = function () {
+            if ((this.readyState === 4) && (this.status === 200)) {
+                var response = JSON.parse(xhr.responseText);
 
-            // Verifique se response.data está definido antes de tentar iterar sobre ele
-            if (response.data && Array.isArray(response.data)) {
-                response.data.forEach(function (current) {
-                    rankings.push(current);
-                });
+                // Verifique se response.data está definido antes de tentar iterar sobre ele
+                if (response.data && Array.isArray(response.data)) {
+                    response.data.forEach(function (current) {
+                        rankings.push(current);
+                    });
+                }
             }
-        }
-    };
-    xhr.send();
+        };
+        xhr.send();
     }
 
+    //feito
     showRanking = () => {
-        //document.getElementById("divRanking").style.display="block";
+        document.getElementById("divRanking").style.display="block";
 
         var rankings = this.rankings;
 
@@ -473,8 +469,11 @@ window.onload = function ()  {
         window.info = info;
     }
 
-    /*if (window.location.pathname === '/profile.html') {
-        info.showDetalheLivro();
+    if (window.location.pathname === '/profile.html') {
+        info.getMinhaBiblioteca();
+        info.getMinhaBibliotecaCallback = function() {
+            info.showMinhaBiblioteca();
+        };
         window.info = info;
-    }*/
+    }
 };

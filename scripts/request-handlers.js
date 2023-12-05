@@ -136,7 +136,7 @@ const adicionarBiblioteca = (req, res) => {
 module.exports.adicionarBiblioteca = adicionarBiblioteca;
 
 
-const getPerilUser = (req, res) => {
+const getLivrosUser = (req, res) => {
     var idUser = req.params.id;
 
     var connection = mysql.createConnection(options);
@@ -148,18 +148,19 @@ const getPerilUser = (req, res) => {
             console.log('Estado da conexão após conectar:', connection.state);
         }
     });
-    var query = mysql.format("SELECT U.idUser, U.username, U.email, LU.idLivro, L.titulo, L.autor, L.imagem, G.designacao as 'livroGenero' FROM Livro_User LU JOIN User U ON LU.idUser = U.idUser JOIN Livro L ON LU.idLivro = L.idLivro JOIN Genero G ON L.genero = G.idGenero WHERE idUser=?", idUser);
-    connection.query(query, function (err, rows) {
+    var query = mysql.format("SELECT L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao AS livroGenero, L.imagem FROM  Livro L JOIN Livro_User LU ON L.idLivro = LU.idLivro JOIN Genero G ON L.genero = G.idGenero WHERE LU.idUser=?", idUser);
+        connection.query(query, function (err, rows) {
         connection.end(); 
 
         if (err) {            
             res.json({"message": "Erro" });
         } else {            
             res.json({"message": "OK", "data": rows });
+            console.log(rows);
         }
     }); 
 }
-module.exports.getPerilUser = getPerilUser;
+module.exports.getLivrosUser = getLivrosUser;
 
 
 const ranking = (req, res) => {
@@ -188,6 +189,34 @@ const ranking = (req, res) => {
 module.exports.ranking = ranking;
 
 
+const removerLivro = (req, res) => {
+    var idUser = req.params.idUser;
+    var idLivro = req.params.idLivro;
+
+    var connection = mysql.createConnection(options);
+    connection.connect(function (err) {
+        if (err) {
+            console.log('Erro ao conectar a base de dados:', err.message);
+        } else {
+            console.log('Conexão bem-sucedida a base de dados.');
+            console.log('Estado da conexão após conectar:', connection.state);
+        }
+    });
+    var query = mysql.format("DELETE FROM Livro_User WHERE idUser=? AND idLivro=?;", [idUser, idLivro]);
+        connection.query(query, function (err, rows) {
+        connection.end(); 
+
+        if (err) {            
+            res.json({"message": "Erro" });
+        } else {            
+            res.json({"message": "OK", "data": rows });
+            console.log(rows);
+        }
+    });
+
+
+}
+module.exports.removerLivro = removerLivro;
 
 
 
@@ -197,9 +226,6 @@ const atualizarUser = (req, res) => {
 }
 module.exports.atualizarUser = atualizarUser;
 
-const removerLivro = (req, res) => {
 
-}
-module.exports.removerLivro = removerLivro;
 
 

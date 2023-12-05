@@ -23,20 +23,22 @@ class Livro {
 };
 
 class LivroUser{
-    constructor(idLivro, idUser, titulo, autor, livroGenero, imagem) {
+    constructor(idLivro, idUser, titulo, autor, livroGenero, imagem, dataAdicionado) {
         this.idLivro = idLivro;
         this.idUser = idUser;
         this.titulo = titulo;
         this.autor = autor;
         this.livroGenero = livroGenero;
         this.imagem = imagem;
+        this.dataAdicionado = dataAdicionado;
     }
 }
 
 class Ranking {
-    constructor(livro, totalAdicionados) {
+    constructor(livro, totalAdicionados, dataAdicionado) {
         this.livro = livro;
         this.totalAdicionados = totalAdicionados;
+        this.dataAdicionado = dataAdicionado;
     }
 }
 
@@ -88,7 +90,8 @@ class Information {
         var info = this;
         var id = document.getElementById("idLogin").value;
         var email = document.getElementById("emailL").value;
-        var pass = document.getElementById("passwordL").value;    
+        var pass = document.getElementById("passwordL").value;
+
         var dados = {id:id, email: email, pass: pass};
     
         var xhr = new XMLHttpRequest();
@@ -104,7 +107,6 @@ class Information {
                         var responseData = xhr.response[0];
                         var response = new User(responseData.idUser, responseData.username, responseData.email, responseData.pass);
                         info.users.push(response);
-                        console.log(response.idUser);
 
                         localStorage.setItem('idUser', response.idUser);
 
@@ -269,7 +271,6 @@ class Information {
         livrosContainer.appendChild(row);
     };
 
-
     //feito
     adicionarBiblioteca = (idLivro) => {
         var info = this;
@@ -279,21 +280,33 @@ class Information {
         var xhr = new XMLHttpRequest();        
         xhr.responseType="json";
         xhr.onreadystatechange = function () {
-            if ((xhr.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
-                var response = new LivroUser(idLivro, idUser);
-                info.userLivro.push(response);
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var response = xhr.response;
+
+                // Verifique a mensagem do servidor
+                if (response.message === "OK") {
+                    // Sucesso, o livro foi adicionado à biblioteca
+                    var livroUser = new LivroUser(idLivro, idUser);
+                    info.userLivro.push(livroUser);
+                } else if (response.message === "Já adicionado à biblioteca") {
+                    // O livro já está na biblioteca, você pode tratar isso conforme necessário
+                    alert("Livro já adicionado à biblioteca");
+                } else {
+                    // Outro caso de erro
+                    console.error("Erro durante a solicitação. Mensagem do servidor: " + response.message);
+                }
+            } else {
+                // Erro de solicitação HTTP
+                console.error("Erro durante a solicitação. Código: " + xhr.status);
+                console.error("Mensagem de erro do servidor: " + xhr.responseText);
             }
+        }
         }
         xhr.open("POST", "/adicionar", true);
 
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(dados));
-    };
-
-    processingProfile = () => {
-        var idUser = localStorage.getItem('idUser');
-        document.getElementById("usernameP").textContent = "tata";
-
     };
     
     //feito
@@ -340,7 +353,7 @@ class Information {
                     <ul>
                         <li><img src="assets/images/${livro.imagem}" alt="" class="templatemo-item"></li>
                         <li><h4>${livro.titulo}</h4><span>${livro.autor}</span></li>
-                        <li><h4>Data Adicionada</h4><span>24/08/2036</span></li>
+                        <li><h4>Data Adicionada</h4><span>${livro.dataAdicionado}</span></li>
                         <li><h4>Gênero</h4><span>${livro.livroGenero}</span></li>
                         <li><input type="submit" value="Remover" class="btnRemover" onclick="info.removeLivro(${livro.idLivro})"/></li>            
                     </ul>
@@ -432,7 +445,7 @@ class Information {
                 row.appendChild(livroCell);
 
                 var totalAdicoesCell = document.createElement("td");
-                totalAdicoesCell.appendChild(document.createTextNode(ranking.totalAdicoes));
+                totalAdicoesCell.appendChild(document.createTextNode(ranking.totalAdicionados));
                 row.appendChild(totalAdicoesCell);
 
                 tbody.appendChild(row);
@@ -454,8 +467,7 @@ class Information {
 var info = new Information("divInformation");
 
 window.onload = function ()  {
-
-    info.processingProfile();
+    
     info.rankingLivros();
     window.info = info;
 
@@ -471,6 +483,7 @@ window.onload = function ()  {
 
     if (window.location.pathname === '/profile.html') {
         info.getMinhaBiblioteca();
+        
         info.getMinhaBibliotecaCallback = function() {
             info.showMinhaBiblioteca();
         };

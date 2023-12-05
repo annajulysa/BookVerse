@@ -120,18 +120,31 @@ const adicionarBiblioteca = (req, res) => {
     var idLivro = req.body.idLivro;
     var idUser = req.body.idUser;
     
-    if(req.method == "POST") {
-        sql = mysql.format("INSERT INTO Livro_User(idLivro, idUser) VALUES (?,?)", [idLivro, idUser]);
-    }
-    connection.query(sql,function (err, rows, fields) {
-        connection.end(); 
-
+    var valida = mysql.format("SELECT * FROM Livro_User WHERE idUser=? AND idLivro=?;", [idUser, idLivro]);
+    connection.query(valida, function (err, rows) {
         if (err) {
-            res.sendStatus(404);
+            connection.end();
+            res.json({"message": "Erro"});
         } else {
-            res.send(rows);
+            if (rows.length > 0) {
+                // Livro já adicionado à biblioteca
+                connection.end();
+                res.json({"message": "Já adicionado à biblioteca"});
+            } else {
+                // Livro não adicionado à biblioteca, faça a inserção
+                sql = mysql.format("INSERT INTO Livro_User(idLivro, idUser) VALUES (?,?)", [idLivro, idUser]);
+                connection.query(sql, function (err, rows, fields) {
+                    connection.end();
+                    if (err) {
+                        res.sendStatus(404);
+                    } else {
+                        res.json({"message": "OK"});
+                    }
+                });
+            }
         }
-    });  
+    });
+    
 }
 module.exports.adicionarBiblioteca = adicionarBiblioteca;
 
@@ -148,7 +161,7 @@ const getLivrosUser = (req, res) => {
             console.log('Estado da conexão após conectar:', connection.state);
         }
     });
-    var query = mysql.format("SELECT L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao AS livroGenero, L.imagem FROM  Livro L JOIN Livro_User LU ON L.idLivro = LU.idLivro JOIN Genero G ON L.genero = G.idGenero WHERE LU.idUser=?", idUser);
+    var query = mysql.format("SELECT L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao AS livroGenero, L.imagem, LU.dataAdicionado FROM  Livro L JOIN Livro_User LU ON L.idLivro = LU.idLivro JOIN Genero G ON L.genero = G.idGenero WHERE LU.idUser=? order by LU.dataAdicionado;", idUser);
         connection.query(query, function (err, rows) {
         connection.end(); 
 
@@ -173,7 +186,7 @@ const ranking = (req, res) => {
             console.log('Estado da conexão após conectar:', connection.state);
         }
     });
-    var query = mysql.format("SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicoes' FROM Livro JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro GROUP BY Livro.idLivro, Livro.titulo ORDER BY totalAdicoes DESC;");
+    var query = mysql.format("SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicionados', MAX(Livro_User.dataAdicionado) AS 'dataAdicionado' FROM Livro JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro GROUP BY Livro.idLivro, Livro.titulo ORDER BY dataAdicionado DESC");
     connection.query(query, function (err, rows) {
         connection.end(); 
 
@@ -217,8 +230,6 @@ const removerLivro = (req, res) => {
 
 }
 module.exports.removerLivro = removerLivro;
-
-
 
 
 const atualizarUser = (req, res) => {

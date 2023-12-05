@@ -284,16 +284,16 @@ class Information {
             if (xhr.status === 200) {
                 var response = xhr.response;
 
-                // Verifique a mensagem do servidor
+                // verifica a mensagem do servidor
                 if (response.message === "OK") {
-                    // Sucesso, o livro foi adicionado à biblioteca
-                    var livroUser = new LivroUser(idLivro, idUser);
-                    info.userLivro.push(livroUser);
+                    // o livro foi adicionado à biblioteca
+                    //var livroUser = new LivroUser(idLivro, idUser, dataAdicionado);
+                    //info.userLivro.push(livroUser);
+                    console.log("Adicionado");
                 } else if (response.message === "Já adicionado à biblioteca") {
-                    // O livro já está na biblioteca, você pode tratar isso conforme necessário
+                    // livro já está na biblioteca
                     alert("Livro já adicionado à biblioteca");
                 } else {
-                    // Outro caso de erro
                     console.error("Erro durante a solicitação. Mensagem do servidor: " + response.message);
                 }
             } else {
@@ -490,3 +490,25 @@ window.onload = function ()  {
         window.info = info;
     }
 };
+
+function isAuthenticated() {
+    return localStorage.getItem('idUser') !== null;
+}
+
+// Função para realizar o logout
+function logout() {
+    // Remover dados de sessão
+    localStorage.removeItem('idUser');
+
+    // Redirecionar para a página de login (ou outra página)
+    window.location.href = 'signin.html';
+}
+
+// Verificar se o usuário está autenticado antes de executar qualquer ação
+document.addEventListener('DOMContentLoaded', function () {
+        // Adicionar um ouvinte de eventos ao botão de logout
+    const logoutButton = document.getElementById('btnLogout');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', logout);
+    }
+});

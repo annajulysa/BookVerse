@@ -15,22 +15,22 @@
 				<h3>Nova conta?</h3>
 				<div class="form-holder" id="divInformation">
 					<span class="lnr lnr-user"></span>
-					<input type="text" id="usernameR" class="form-control" placeholder="Username">
+					<input type="text" id="usernameR" class="form-control" placeholder="Username" required>
 				</div>
 				<div class="form-holder">
 					<span class="lnr lnr-phone-handset"></span>					
 				</div>
 				<div class="form-holder">
 					<span class="lnr lnr-envelope"></span>
-					<input type="text" id="emailR" class="form-control" placeholder="Email">
+					<input type="text" id="emailR" class="form-control" placeholder="Email" pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
 				</div>
 				<div class="form-holder">
 					<span class="lnr lnr-lock"></span>
-					<input type="password" id="passwordR" class="form-control" placeholder="Password">
+					<input type="password" id="passwordR" class="form-control" placeholder="Password" required>
 				</div>
 				<div class="form-holder">
 					<span class="lnr lnr-lock"></span>
-					<input type="password" id="passConfirmedR" class="form-control" placeholder="Confirm Password">
+					<input type="password" id="passConfirmedR" class="form-control" placeholder="Confirm Password" required>
 				</div>	
 				<input class="btn" id="Save" type="submit" value="REGISTAR" />
 				<div>

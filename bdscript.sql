@@ -97,6 +97,8 @@ INSERT INTO Livro_User(idLivro, idUser) VALUES (6, 5);
 INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 5);
 Select * from Livro_User;
 
+SELECT U.idUser, U.username, U.email, LU.idLivro, L.titulo, L.autor, G.designacao as 'livroGenero' FROM Livro_User LU JOIN User U ON LU.idUser = U.idUser JOIN Livro L ON LU.idLivro = L.idLivro JOIN Genero G ON L.genero = G.idGenero where u.iduser = 1;
+
 
 
 

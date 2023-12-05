@@ -18,12 +18,14 @@ app.use(express.static("www"));
 // routing
 app.post("/logins", requestHandlers.validaLogin);
 app.post("/registars", requestHandlers.registarUser); 
+app.get("/utilizador/:id", requestHandlers.getPerilUser);
 app.get("/livros", requestHandlers.getLivros); // apresentar todos os livros da bd
 app.get("/detalhelivro/:id", requestHandlers.getDetalhesLivro); // apresentar os detalhes do livro
 app.post("/adicionar", requestHandlers.adicionarBiblioteca);
-/*app.put("/utilizador/:id", requestHandlers.atualizarUser); //atualizar no no user
-app.get("/utilizador/:id/livros/:id", requestHandlers.getLivrosUser); //apresentar todos os livros da minha biblioteca
-app.delete("/utilizador/:id/livros/:id", requestHandlers.removerLivro); // remover livro da minha biblioteca*/
+
+
+//app.get("/utilizador/:id/livros/:id", requestHandlers.getLivrosUser); //apresentar todos os livros da minha biblioteca
+//app.delete("/utilizador/:id/livros/:id", requestHandlers.removerLivro); // remover livro da minha biblioteca*/
 
 
 // start server

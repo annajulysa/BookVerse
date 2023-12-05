@@ -112,6 +112,7 @@ const getDetalhesLivro = (req, res) => {
 }
 module.exports.getDetalhesLivro = getDetalhesLivro;
 
+
 const adicionarBiblioteca = (req, res) => {
     var connection = mysql.createConnection(options);
     var sql;
@@ -134,6 +135,31 @@ const adicionarBiblioteca = (req, res) => {
 module.exports.adicionarBiblioteca = adicionarBiblioteca;
 
 
+const getPerilUser = (req, res) => {
+    var idUser = req.params.id;
+
+    var connection = mysql.createConnection(options);
+    connection.connect(function (err) {
+        if (err) {
+            console.log('Erro ao conectar a base de dados:', err.message);
+        } else {
+            console.log('Conexão bem-sucedida a base de dados.');
+            console.log('Estado da conexão após conectar:', connection.state);
+        }
+    });
+    var query = mysql.format("SELECT U.idUser, U.username, U.email, LU.idLivro, L.titulo, L.autor, L.imagem, G.designacao as 'livroGenero' FROM Livro_User LU JOIN User U ON LU.idUser = U.idUser JOIN Livro L ON LU.idLivro = L.idLivro JOIN Genero G ON L.genero = G.idGenero WHERE idUser=?", idUser);
+    connection.query(query, function (err, rows) {
+        connection.end(); 
+
+        if (err) {            
+            res.json({"message": "Erro" });
+        } else {            
+            res.json({"message": "OK", "data": rows });
+        }
+    }); 
+}
+module.exports.getPerilUser = getPerilUser;
+
 
 
 
@@ -148,8 +174,4 @@ const removerLivro = (req, res) => {
 }
 module.exports.removerLivro = removerLivro;
 
-const getLivrosUser = (req, res) => {
-
-}
-module.exports.getLivrosUser = getLivrosUser;
 

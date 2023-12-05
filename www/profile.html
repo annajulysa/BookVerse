@@ -8,8 +8,6 @@
   <!-- Additional CSS Files -->
   <link rel="stylesheet" href="assets/css/fontawesome.css">
   <link rel="stylesheet" href="assets/css/templatemo-cyborg-gaming.css">
-  <link rel="stylesheet" href="assets/css/owl.css">
-  <link rel="stylesheet" href="assets/css/animate.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
 </head>
 <body>
@@ -40,7 +38,7 @@
                   <ul class="nav">
                     <li><a href="signin.html">LogOut</a></li>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="profile.html" class="active">Profile <img src="assets/images/profile.png" alt=""></a></li>                      
+                    <li><a href="profile.html" class="active" onclick="javascript: info.processingProfile();">Profile <img src="assets/images/profile.png" alt=""></a></li>                      
                   </ul>   
                   <a class="menu-trigger">
                       <span>Menu</span>
@@ -91,34 +89,7 @@
             <div class="heading-section">
               <h4><em>Sua Biblioteca de</em> Livros</h4>
             </div>
-            <div class="item">
-              <ul>
-                <li><img src="assets/images/Lupin.jpg" alt="" class="templatemo-item"></li>
-                <li><h4>Arsene Lupin</h4><span>Maurice Leblanc</span></li>
-                <li><h4>Data Adicionada</h4><span>24/08/2036</span></li>
-                <!--<li><h4>Hours Played</h4><span>634 H 22 Mins</span></li>-->
-                <li><h4>Gênero</h4><span>Policial</span></li>                
-              </ul>
-            </div>
-            <div class="item">
-              <ul>
-                <li><img src="assets/images/policial.jpg" alt="" class="templatemo-item"></li>
-                <li><h4>Os Anagramas de Varsovia</h4><span>Richard Zimler</span></li>
-                <li><h4>Data Adicionada</h4><span>22/06/2036</span></li>
-                <!--<li><h4>Hours Played</h4><span>634 H 22 Mins</span></li>-->
-                <li><h4>Gênero</h4><span>Ficcção Historica</span></li>                
-              </ul>
-            </div>
-            <!--<div class="item last-item">
-              <ul>
-                <li><img src="assets/images/game-03.jpg" alt="" class="templatemo-item"></li>
-                <li><h4>CS-GO</h4><span>Sandbox</span></li>
-                <li><h4>Date Added</h4><span>21/04/2022</span></li>
-                <li><h4>Hours Played</h4><span>632 H 46 Mins</span></li>
-                <li><h4>Currently</h4><span>Downloaded</span></li>
-                
-              </ul>
-            </div>-->
+            <div id="minhaBibliot"></div>
           </div>
         </div>
         <!-- ***** Gaming Library End ***** -->
@@ -138,11 +109,10 @@
 </footer>
 <!-- Scripts -->
 <!-- Bootstrap core JavaScript -->
+<script src="./assets/js/PSW2023.js"></script>
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/isotope.min.js"></script>
-<script src="assets/js/owl-carousel.js"></script>
-<script src="assets/js/tabs.js"></script>
 <script src="assets/js/popup.js"></script>
 <script src="assets/js/custom.js"></script>
 </body>

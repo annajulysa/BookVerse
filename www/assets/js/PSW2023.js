@@ -1,3 +1,11 @@
+/** 
+* @class Estrutura com capacidade de armazenar o estado da entidade utilizador 
+* @constructs User
+* @param {int} idUser - id do utilizador
+* @param {string} username - nome da utilizador
+* @param {string} email - email do utilizador
+* @param {string} pass - password do utilizador
+*/
 class User {
     constructor(idUser, username, email, pass) {
         this.idUser = idUser;
@@ -6,7 +14,19 @@ class User {
         this.pass = pass;
     }
 };
-
+/** 
+* @class Estrutura com capacidade de armazenar o estado de uma entidade livro 
+* @constructs Livro
+* @param {int} idLivro - id do livro
+* @param {string} titulo - titulo do livro
+* @param {string} obra - texto sobre a obra do livro
+* @param {string} personagem - texto sobre o personagem do livro
+* @param {string} autor - autor do livro
+* @param {idGenero} idGenero - id do genero do livro
+* @param {string} livroGenero - designação do genero do livro
+* @param {string} imagem - nome da imagem do livro - para localizaocao
+* @param {int} gosots - quantidade de pessoas que adicionaram à sua biblioteca
+*/
 class Livro {
     constructor(idLivro, titulo, obra, personagem, pagina, autor, idGenero, livroGenero, imagem, gostos) {
         this.idLivro = idLivro;
@@ -21,7 +41,17 @@ class Livro {
         this.gostos = gostos;
     }
 };
-
+/** 
+* @class Estrutura com capacidade de armazenar o estado de uma entidade livroUser 
+* @constructs LivroUser
+* @param {int} idLivro - id do livro
+* @param {int} iidUser - id do utilizador
+* @param {string} titulo - titulo do livro
+* @param {string} autor - autor do livro
+* @param {string} livroGenero - designação do genero do livro
+* @param {string} imagem - nome da imagem do livro - para localizaocao
+* @param {Date} dataAdicionado - data do dia em que o utilizador adicionou o livro à sua biblioteca
+*/
 class LivroUser{
     constructor(idLivro, idUser, titulo, autor, livroGenero, imagem, dataAdicionado) {
         this.idLivro = idLivro;
@@ -33,7 +63,13 @@ class LivroUser{
         this.dataAdicionado = dataAdicionado;
     }
 }
-
+/** 
+* @class Estrutura com capacidade de armazenar o estado de uma entidade pessoa 
+* @constructs Person
+* @param {string} livro - nome do livro
+* @param {int} totalAdicionados - quantidade de pessoas que tem adicionado o livro
+* @param {int} dataAdicionado - data do dia em que o utilizador adicionou o livro à sua biblioteca - para ordenar
+*/
 class Ranking {
     constructor(livro, totalAdicionados, dataAdicionado) {
         this.livro = livro;
@@ -42,6 +78,17 @@ class Ranking {
     }
 }
 
+/** 
+* @class Guarda toda informação necessaria na execução do site 
+* @constructs Informacao
+* @param {string} id - id do elemento HTML que contém a informação.
+* @property {string} id - id do elemento HTML que contém a informação.
+* @property {users[]} users - Array de objetos do tipo User, para guardar todas as informações do utilizador do nosso sistema
+* @property {livros[]} livros - Array de objetos do tipo Livro, para guardar todos os livros da base de dados
+* @property {userLivros[]} userLivros - Array de objetos do tipo LivroUser, para guardar todos livros do utilizador
+* @property {detalhes[]} detalhes - Array de objetos do tipo Livro, para guardar todas as informações do livro que irão aparecer na Pagina detalhes
+* @property {rankings[]} rankings - Array de objetos do tipo Ranking, para guardar o os livros mais adicionados, e consequentimente utilizado para fazer o ranking 
+*/
 class Information {
     constructor(id) {
         this.id = id;
@@ -53,47 +100,69 @@ class Information {
     }
 
     // feito
+    /**
+     * Função que regista o utilizador na base de dados atraves do petodo POST e depois é redirecionado para a pagina login, para assim conseguir aceder ao site
+     * Nesta função também é feito a validação das passwords para assim finalizar a função
+     * @memberof Information
+     * @param {string} acao - Ação a ser executada, por exemplo, "create" para criar um novo usuário.
+     */
     registarUser = (acao) => {
+        // Referência à instância da classe Information
         var info = this;
+        // Obtém os valores dos campos do formulário de registro
         var id = document.getElementById("id").value;
         var username = document.getElementById("usernameR").value;
         var email = document.getElementById("emailR").value;
         var pass = document.getElementById("passwordR").value;
         var passconf = document.getElementById("passConfirmedR").value;
-        
-        var person = {id:id, username: username, email: email, pass: pass};
+        // Cria um objeto com os dados do utilizador
+        var person = {id:id, username: username, email: email, pass: pass}; 
 
+        // Verifica se as senhas coincidem
         if(pass === passconf)
         {
+            // Cria uma instância do objeto XMLHttpRequest para realizar solicitações assíncronas
             var xhr = new XMLHttpRequest();        
             xhr.responseType="json";
 
             if (acao === "create") {
+                // Define a função de retorno de chamada para ser executada quando o estado da solicitação muda
                 xhr.onreadystatechange = function () {
                     if ((xhr.readyState == XMLHttpRequest.DONE) && (this.status === 200)) {
+                        // guard a resposta JSON do servidor
                         var newUser = new User(xhr.response.insertId, username, email, pass);
+                        // Adiciona o novo utilizador à lista de utilizadores da instância
                         info.users.push(newUser);
                         window.location.href = 'signin.html';
                     }
                 }
+                // Configura a solicitação POST para o servidor
                 xhr.open("POST", "/registars", true);
             }
+            // Envia a solicitação para o servidor, incluindo os dados do novo utilizador em formato JSON
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(person));
         } else {
+            // Se as passwords não coincidirem, exibe um alerta
             alert("Password invalida.");
         }                
     };
 
     //feito
-    processingLogin() {
+    /**
+     * Função que obtem as informações de id, email e senha do formulário de login e envia uma solicitação ao servidor NODE.JS de forma assíncrona e em JSON.
+     * Caso o utilizador seja invalido será lançado um alerta
+     * @memberof Information
+     */
+    processingLogin() {        
         var info = this;
+        // Obtém os valores dos campos de ID, e-mail e senha do formulário de login
         var id = document.getElementById("idLogin").value;
         var email = document.getElementById("emailL").value;
         var pass = document.getElementById("passwordL").value;
-
+        
         var dados = {id:id, email: email, pass: pass};
-    
+        
         var xhr = new XMLHttpRequest();
         xhr.responseType="json";              
     
@@ -102,34 +171,47 @@ class Information {
                 if (this.status === 200) {
                     console.log("Resposta completa do servidor:", xhr.response);
         
-                    // verificar se a resposta é um array
+                    // Verifica se a resposta do servidor é um array não vazio
                     if (xhr.response && xhr.response.length > 0) {
                         var responseData = xhr.response[0];
+                        // Cria uma instância do objeto User com os dados do utilizador
                         var response = new User(responseData.idUser, responseData.username, responseData.email, responseData.pass);
+                        // Adiciona o usuário à lista de usuários na instância da classe Information
                         info.users.push(response);
-
+                        // Armazena o id do usuário no armazenamento local
                         localStorage.setItem('idUser', response.idUser);
 
                         window.location.href = 'index.html';
+                        // Exibe todos os livros da bd após o login
                         info.showLivros();
                         
                     } else {
+                        // Exibe um erro se a resposta do servidor estiver vazia ou não estiver no formato esperado
                         console.error("Erro: A resposta do servidor está vazia ou não está no formato esperado.");
                     }
                 } else {
+                    // Exibe um alerta e mensagens de erro se a solicitação não for bem-sucedida (dados invalidos)
                     alert("Dados de utilizador invalido.");
                     console.error("Erro durante a solicitação. Código: " + this.status);
                     console.error("Mensagem de erro do servidor: " + xhr.responseText);
                 }
             }              
         }
+        // Configura a solicitação POST para o endpoint /logins no servidor
         xhr.open("POST", "/logins", true);    
-
+        // Define o cabeçalho Content-Type da solicitação como application/json
         xhr.setRequestHeader('Content-Type', 'application/json');
+        // Envia os dados do usuário (convertidos para JSON) para o servidor
         xhr.send(JSON.stringify(dados));   
     };
 
     //feito
+    /**
+     * Função assíncrona para obter todos os dados dos livros do servidor.
+     * Faz uma solicitação GET para o endpoint /livros no servidor e popula a lista de livros da instância da classe Information.
+     * @memberof Information
+     * @returns {Promise} Uma Promise que é resolvida quando a operação é concluída com sucesso.
+     */
     getLivros = () => {
         return new Promise((resolve, reject) => {
             var info = this;
@@ -138,9 +220,11 @@ class Information {
             xhr.onreadystatechange = function () {
                 if ((this.readyState === 4) && (this.status === 200)) {
                     var response = JSON.parse(xhr.responseText);
+                    // Lê novamente os dados da resposta e adiciona cada livro à lista de livros da instância
                     response.data.forEach(function (current) {
                         info.livros.push(current);
                     });
+                    // Resolve a Promise, indicando que a operação foi concluída com sucesso
                     resolve();
                 }
             };
@@ -149,12 +233,20 @@ class Information {
     };
 
     //feito
+    /**
+     * funcao assíncrona para exibir a lista de livros na página. Obtém os livros assincronamente, cria elementos HTML dinâmicos para cada livro e adiciona à página.
+     * Os livros são exibidos em linhas, cada linha contendo até 4 livros.
+     */
     showLivros = () => {
+        // invoca a função assincrona getLivros() para obter a lista de livros
         this.getLivros().then(() => {
+            //variavel com o id da tag onde iremos apresentar as informações
             const livrosContainer = document.getElementById('listaLivros');
             var info = this;
-            //4 livros por cada row
+            //4 livros por linha
             for (let i = 0; i < info.livros.length; i += 4) {
+
+                // Cria um elemento de row 
                 const row = document.createElement('div');
                 row.className = 'row';
 
@@ -181,20 +273,26 @@ class Information {
                                 </div>
                             </div>
                             <div class="down-content">
-                                <a href="details.html" onclick="info.getDetalheLivro(${livro.idLivro});">                                                 <span><i class="fa fa-check"></i> ${livro.autor}</span>
+                                <a href="details.html" onclick="info.getDetalheLivro(${livro.idLivro});"><span><i class="fa fa-check"></i> ${livro.autor}</span>
                                     <h4 id="xpto">${livro.titulo}</h4>
                                 </a>
                             </div>
                         </div>
                     `;
+                    // Adiciona o elemento do livro à row
                     row.appendChild(livroElement);
                 }
+                // Adiciona a row completa ao contêiner de livros
                 livrosContainer.appendChild(row);
             }
         });        
     };
 
-    
+    /**
+     * Função que é invocada quando o utilizador clica em algum livro e que obtem de forma assíncrona as informações completas de um livro do servidor com base no id do livro.
+     * @param {number} idLivro - O id do livro para o qual detalhes estão sendo solicitados.
+     * @memberof Information
+     */    
     getDetalheLivro = (idLivro) => {
         var info = this;
         var xhr = new XMLHttpRequest();
@@ -204,9 +302,12 @@ class Information {
                 var response = JSON.parse(xhr.responseText);
                 debugger;
                 console.log(response);
+
+                // Verifica se há dados na resposta
                 if (response.data.length > 0) {                    
                     var responseData = response.data[0];  
                     var livro = new Livro(responseData.autor, responseData.titulo, responseData.obra, responseData.personagem, responseData.pagina, responseData.autor, responseData.livroGenero, responseData.imagem);
+                    // Adiciona o livro ao array 'detalhes' na instância Information                  
                     info.detalhes.push(livro);
                 } else {
                     console.log("O livro não foi encontrado.");
@@ -217,7 +318,9 @@ class Information {
         };
         xhr.send();
     };
-
+    /**
+     * Função que apresenta a pagina "Detalhes" do livro. as informações são apresentadas dentro de uma tad div com o id detalheLivro e depois é criado todo o layout da pagina
+     */
     showDetalheLivro = () => {
         var info = this;
         const livrosContainer = document.getElementById('detalheLivro');
@@ -225,7 +328,7 @@ class Information {
         const row = document.createElement('div');
             row.className = 'row';
 
-        for (let j=0; j < j < this.detalhes.length; j++) {
+        for (let j=0; j < this.detalhes.length; j++) {
             const livro = info.detalhes[j];
 
             const livroElement = document.createElement('div');
@@ -272,6 +375,10 @@ class Information {
     };
 
     //feito
+    /**
+     * Função responsável por enviar uma solicitação para adicionar um livro à biblioteca do utilizador.
+     * @param {number} idLivro - O id do livro a ser adicionado à biblioteca.
+     */
     adicionarBiblioteca = (idLivro) => {
         var info = this;
         var idUser = localStorage.getItem('idUser');
@@ -300,8 +407,7 @@ class Information {
                 // Erro de solicitação HTTP
                 console.error("Erro durante a solicitação. Código: " + xhr.status);
                 console.error("Mensagem de erro do servidor: " + xhr.responseText);
-            }
-        }
+            }}
         }
         xhr.open("POST", "/adicionar", true);
 
@@ -310,7 +416,12 @@ class Information {
     };
     
     //feito
+    /**
+     * Função responsável por obter a biblioteca pessoal do utilizador a partir do servidor.
+     * Os dados obtidos são armazenados no array userLivros.
+     */
     getMinhaBiblioteca = () => {
+        // Obtém a referência para o array userLivros e o id do utilizador armazenado localmente
         var userLivros = this.userLivros;
         var idUser = localStorage.getItem('idUser');
         var xhr = new XMLHttpRequest();
@@ -337,6 +448,9 @@ class Information {
     };
 
     //feito
+    /**
+     * Função que apresenta uma lista dos livros que utilizador tem em sua biblioteca por meio de um ciclo sobre o array userLivros
+     */
     showMinhaBiblioteca = () => {
         var userLivros = this.userLivros;
         const livrosContainer = document.getElementById('minhaBibliot');  
@@ -370,6 +484,12 @@ class Information {
     };
 
     //feito
+    /**
+     * Função responsável por remover um livro da biblioteca do utilizador.
+     * Realiza uma solicitação HTTP DELETE ao servidor para remover a associação do livro ao utilizador.
+     * Atualiza o array userLivros e exibe a biblioteca novamente.
+     * @param {number} idLivro - O id do livro a ser removido.
+     */
     removeLivro = (idLivro) => {
         var idUser = localStorage.getItem('idUser');
         var info = this;
@@ -377,7 +497,9 @@ class Information {
         xhr.open("DELETE", "/utilizador/"+ idUser +"/livros/"+ idLivro, true);
         xhr.onreadystatechange = function () {
             if ((this.readyState === 4) && (this.status === 200)) {
+                // Remove o livro do array userLivros com id do livro
                 info.userLivros.splice(info.userLivros.findIndex(i => i.idLivro == idLivro), 1);
+                // Atualiza a exibição da biblioteca do utilizador
                 info.showMinhaBiblioteca();
             }
         };
@@ -385,6 +507,10 @@ class Information {
     }
 
     //feito
+    /**
+     * Função responsável por obter o ranking de livros por meio de uma solicitação HTTP GET ao servidor.
+     * Atualiza o array rankings com os dados do ranking recebidos.
+     */
     rankingLivros = () => {
         var rankings = this.rankings;
         var xhr = new XMLHttpRequest();
@@ -395,6 +521,7 @@ class Information {
 
                 // Verifique se response.data está definido antes de tentar iterar sobre ele
                 if (response.data && Array.isArray(response.data)) {
+                    // Lê os dados do ranking e os adiciona ao array rankings
                     response.data.forEach(function (current) {
                         rankings.push(current);
                     });
@@ -405,7 +532,12 @@ class Information {
     }
 
     //feito
+    /**
+     * Função responsável por exibir o ranking de livros em uma tabela HTML. A tabela é criada dinamicamente com base nos dados do array rankings. 
+     * Se não houver dados no ranking, exibe uma mensagem no console.
+     */
     showRanking = () => {
+        // Exibe o elemento divRanking
         document.getElementById("divRanking").style.display="block";
 
         var rankings = this.rankings;
@@ -417,12 +549,12 @@ class Information {
 
             // Crie a tabela
             var table = document.createElement("table");
-            table.className = "ranking-table"; // Adicione uma classe se desejar estilizar a tabela
+            table.className = "ranking-table";
 
             // Cabeçalho da tabela
             var thead = document.createElement("thead");
             var headerRow = document.createElement("tr");
-            var headers = ["Livro", "Total de Vezes Adicionados"]; // Adicione mais cabeçalhos conforme necessário
+            var headers = ["Livro", "Total de Vezes Adicionados"];
 
             headers.forEach(function (headerText) {
                 var th = document.createElement("th");
@@ -438,8 +570,7 @@ class Information {
 
             rankings.forEach(function (ranking) {
                 var row = document.createElement("tr");
-
-                // Adicione mais células conforme necessário
+                
                 var livroCell = document.createElement("td");
                 livroCell.appendChild(document.createTextNode(ranking.livro));
                 row.appendChild(livroCell);
@@ -453,19 +584,26 @@ class Information {
 
             table.appendChild(tbody);
 
-            // Adicione a tabela ao divRanking
+            // Tabela adicionada ao divRanking
             divRanking.innerHTML = "";
             divRanking.appendChild(table);
         } else {
-            // Se não houver dados no ranking, você pode exibir uma mensagem ou fazer outra ação
+            // Se não houver dados no ranking, exibe uma mensagem
             console.log("Sem dados de ranking para exibir.");
         }
 
     }
 }
 
+// Cria uma instância da classe Information com o ID do elemento HTML divInformation
 var info = new Information("divInformation");
 
+/**
+ * Executa a função quando a página está totalmente carregada
+ * Solicita ao servidor o ranking de livros e outros metodos de forma assíncrona
+ * Verifica qual é a página atual é e de acordo com a pagina exibe as informações das funções shows()
+ * @memberof window
+ */
 window.onload = function ()  {
     
     info.rankingLivros();
@@ -482,8 +620,9 @@ window.onload = function ()  {
     }
 
     if (window.location.pathname === '/profile.html') {
+        // Executa o metodo que busca os livros do user de forma assíncrona
         info.getMinhaBiblioteca();
-        
+        // Define uma função de retorno de chamada para exibir os livros
         info.getMinhaBibliotecaCallback = function() {
             info.showMinhaBiblioteca();
         };
@@ -495,18 +634,21 @@ function isAuthenticated() {
     return localStorage.getItem('idUser') !== null;
 }
 
-// Função para realizar o logout
+/**
+ * Função para realizar o logout
+ */ 
 function logout() {
     // Remover dados de sessão
     localStorage.removeItem('idUser');
-
     // Redirecionar para a página de login (ou outra página)
     window.location.href = 'signin.html';
 }
 
-// Verificar se o usuário está autenticado antes de executar qualquer ação
+/**
+ * Verificar se o utilizador está autenticado antes de executar qualquer ação
+ */ 
 document.addEventListener('DOMContentLoaded', function () {
-        // Adicionar um ouvinte de eventos ao botão de logout
+    // Adicionar um ouvinte de eventos ao botão de logout
     const logoutButton = document.getElementById('btnLogout');
     if (logoutButton) {
         logoutButton.addEventListener('click', logout);

@@ -2,7 +2,12 @@
 const mysql = require("mysql");
 const options = require("./connectionOptions.json").database;
 
-
+/**
+ * Função para rinserir um utilizador novo a BD.
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const registarUser = (req, res) => {
     var connection = mysql.createConnection(options);
     var sql;
@@ -25,7 +30,12 @@ const registarUser = (req, res) => {
 }
 module.exports.registarUser = registarUser;
 
-
+/**
+ * Função para validar o login do utilizador na BD.
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const validaLogin = (req, res) => {
     var email = req.body.email;
     var pass = req.body.pass;
@@ -62,7 +72,12 @@ const validaLogin = (req, res) => {
 }
 module.exports.validaLogin = validaLogin;
 
-
+/**
+ * Função para retornar a lista de livros da BD.
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const getLivros = (req, res) => {
     var connection = mysql.createConnection(options);
     connection.connect(function (err) {
@@ -86,7 +101,12 @@ const getLivros = (req, res) => {
 }
 module.exports.getLivros = getLivros;
 
-
+/**
+ * Função para retornar as informaçoes de um livro expecifico livro da BD.
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const getDetalhesLivro = (req, res) => {
     var idLivro = req.params.id;
 
@@ -113,7 +133,12 @@ const getDetalhesLivro = (req, res) => {
 }
 module.exports.getDetalhesLivro = getDetalhesLivro;
 
-
+/**
+ * Função para associar um utilizador a um ou mais livros na BD.
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const adicionarBiblioteca = (req, res) => {
     var connection = mysql.createConnection(options);
     var sql;
@@ -148,7 +173,12 @@ const adicionarBiblioteca = (req, res) => {
 }
 module.exports.adicionarBiblioteca = adicionarBiblioteca;
 
-
+/**
+ * Função para retornar a lista de livros de um utilizador expecifico da BD.
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const getLivrosUser = (req, res) => {
     var idUser = req.params.id;
 
@@ -175,7 +205,12 @@ const getLivrosUser = (req, res) => {
 }
 module.exports.getLivrosUser = getLivrosUser;
 
-
+/**
+ * Função para os livros que mais forma adicionados pelos utilizadores da BD.
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const ranking = (req, res) => {
     var connection = mysql.createConnection(options);
     connection.connect(function (err) {
@@ -201,7 +236,12 @@ const ranking = (req, res) => {
 }
 module.exports.ranking = ranking;
 
-
+/**
+ * Função que permite remover a associação de um livro a um utilizador
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const removerLivro = (req, res) => {
     var idUser = req.params.idUser;
     var idLivro = req.params.idLivro;

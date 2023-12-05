@@ -22,6 +22,8 @@ app.get("/utilizador/:id", requestHandlers.getPerilUser);
 app.get("/livros", requestHandlers.getLivros); // apresentar todos os livros da bd
 app.get("/detalhelivro/:id", requestHandlers.getDetalhesLivro); // apresentar os detalhes do livro
 app.post("/adicionar", requestHandlers.adicionarBiblioteca);
+app.get("/ranking", requestHandlers.ranking);
+
 
 
 //app.get("/utilizador/:id/livros/:id", requestHandlers.getLivrosUser); //apresentar todos os livros da minha biblioteca

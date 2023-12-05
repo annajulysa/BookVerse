@@ -45,9 +45,6 @@ INSERT INTO user(username, email, pass) VALUES ('Anna Almada', 'anna@gmail.com',
 INSERT INTO user(username, email, pass) VALUES ('Pedro Conceição', 'pedro@gmail.com', 'p123');
 INSERT INTO user(username, email, pass) VALUES ('Diogo Oliveira', 'diogo@gmail.com', '123');
 INSERT INTO user(username, email, pass) VALUES ('Sogia Marques', 'sofi@gmail.com', '456sofi');
-Select * from user;
-SELECT * FROM user WHERE email='pedro@gmail.com' and pass='p123';
-
 
 INSERT INTO genero(designacao) VALUES ('Romance');
 INSERT INTO genero(designacao) VALUES ('Humor');
@@ -57,7 +54,6 @@ INSERT INTO genero(designacao) VALUES ('Biografia');
 INSERT INTO genero(designacao) VALUES ('Aventura');
 INSERT INTO genero(designacao) VALUES ('Ação');
 INSERT INTO genero(designacao) VALUES ('Drama');
-SELECT * FROM genero;
 
 INSERT INTO livro(titulo, obra, personagem, pagina, autor, genero, imagem) VALUES ('Arsène Lupin', 'Ladrão de Casaca reúne as 9 primeiras aventuras do notável ladrão. As narrativas envolvem roubos e fugas de Lupin que são bem espetaculares. Ninguém consegue deter o Ladrão de Casacas, apesar das tentativas de seu principal oponente, o Inspetor Ganimard. Arsène Lupin, gentleman-cambrioleur. O editor da revista encomendou a Maurice Leblanc uma novela policial, cujo herói fosse para a França o que era para a Inglaterra Sherlock Holmes e também criar uma rivalidade histórica.', 
 																					'Um personagem fictício francês criado por Maurice Leblanc. Este ladrão cavalheiro é particularmente conhecido pelo seu talento em usar disfarces, inventar e assumir múltiplas identidades para cometer seus crimes criar quebra-cabeças criminais para cometer crimes perfeitos e enganar a polícia.', 
@@ -78,10 +74,6 @@ INSERT INTO livro(titulo, obra, personagem, pagina, autor, genero, imagem) VALUE
 																					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras scelerisque arcu neque, et interdum quam sagittis eget. Quisque id mattis nulla, nec finibus sapien. Mauris ultricies enim ut felis cursus, a sagittis purus pulvinar. Curabitur sodales elit at sodales eleifend. Curabitur et ante leo.',
 																					670, 'Walter Isaacson', 5, 'biografia.jpg');
 INSERT INTO livro(titulo, obra, personagem, pagina, autor, genero, imagem) VALUES ('', '', '', '', '');
-SELECT * FROM livro;
-SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero;
-SELECT l.idLivro, l.titulo, l.autor, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero;
-SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero WHERE idLivro='1';
 
 INSERT INTO Livro_User(idLivro, idUser) VALUES (1, 1);
 INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 1);
@@ -95,14 +87,22 @@ INSERT INTO Livro_User(idLivro, idUser) VALUES (5, 4);
 INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 4);
 INSERT INTO Livro_User(idLivro, idUser) VALUES (6, 5);
 INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 5);
-Select * from Livro_User;
 
+
+Select * from user;
+SELECT * FROM user WHERE email='pedro@gmail.com' and pass='p123';
+
+SELECT * FROM genero;
+
+SELECT * FROM livro;
+SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero;
+SELECT l.idLivro, l.titulo, l.autor, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero;
+SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero WHERE idLivro='1';
 SELECT U.idUser, U.username, U.email, LU.idLivro, L.titulo, L.autor, G.designacao as 'livroGenero' FROM Livro_User LU JOIN User U ON LU.idUser = U.idUser JOIN Livro L ON LU.idLivro = L.idLivro JOIN Genero G ON L.genero = G.idGenero where u.iduser = 1;
-
-
-
-
-
-
-
+SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicoes' FROM Livro 
+	JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro
+	GROUP BY Livro.idLivro, Livro.titulo
+	ORDER BY totalAdicoes DESC;
+    
+SELECT * FROM Livro_User;
 

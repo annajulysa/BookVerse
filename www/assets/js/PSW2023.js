@@ -30,7 +30,7 @@ class LivroUser{
 }
 
 class Perfil {
-    constructor(idLivro, username, email, idUser, titulo, autor, imagem, livroGenero) {
+    constructor(idLivro, username, email, idUser, titulo, autor, imagem, livroGenero,qtdLiros) {
         this.idLivro = idLivro;
         this.idUser = idUser;
         this.username = username;
@@ -39,16 +39,16 @@ class Perfil {
         this.autor = autor;
         this.imagem = imagem;
         this.livroGenero = livroGenero;
+        this.qtdLiros = qtdLiros;
     }
 }
 
-window.onload = (event) => {
-    var info = new Information("divInformation");   
-    info.getLivros();
-    info.getDetalheLivro();
-    window.info = info;
-};
-
+class Ranking {
+    constructor(livro, totalAdicionados) {
+        this.livro = livro;
+        this.totalAdicionados = totalAdicionados;
+    }
+}
 
 class Information {
     constructor(id) {
@@ -58,6 +58,7 @@ class Information {
         this.perfils = [];
         this.userLivro = [];
         this.detalhes = [];
+        this.rankings = [];
     }
 
     // feito
@@ -119,6 +120,8 @@ class Information {
                         localStorage.setItem('idUser', response.idUser);
 
                         window.location.href = 'index.html';
+                        info.showLivros();
+                        
                     } else {
                         console.error("Erro: A resposta do servidor está vazia ou não está no formato esperado.");
                     }
@@ -137,169 +140,144 @@ class Information {
 
     //feito
     getLivros = () => {
-        var info = this;
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/livros", true);
-        xhr.onreadystatechange = function () {
-            if ((this.readyState === 4) && (this.status === 200)) {
-                var response = JSON.parse(xhr.responseText);
-                if (response.data) {
-                    response.data.forEach(function (current) {
-                        info.livros.push(current);
-                        info.showLivros();
-                    });
-                }
-            }
-        };
-        xhr.send();
-    };
-
-    //feito
-    showLivros = () => {
-        var info = this;
-        const livrosContainer = document.getElementById('listaLivros');
-        
-
-        const row = document.createElement('div');
-        row.className = 'row';
-
-        for (let i = 0; i < info.livros.length; i++) {
-            const livro = info.livros[i];
-
-            const livroElement = document.createElement('div');
-            livroElement.className = 'col-lg-3 col-sm-6';
-
-            livroElement.innerHTML = `
-                <div class="item">
-                    <div class="thumb">
-                        <img src="assets/images/${livro.imagem}" alt="">
-                        <div class="hover-effect">
-                            <div class="content">
-                                <div class="live">
-                                    <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); color: #fff; font-size: 14px;
-                                    padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;" onclick="info.adicionarBiblioteca(${livro.idLivro});">
-                                </div>
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-book"></i> ${livro.livroGenero}</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="down-content">
-                        <a href="details.html?idLivro=${livro.idLivro}" onclick="info.showDetalheLivro(${livro.idLivro});">             
-                            <span><i class="fa fa-check"></i> ${livro.autor}</span>
-                            <h4 id="xpto">${livro.titulo}</h4>
-                        </a>
-                    </div>
-                </div>
-            `;      
-            row.appendChild(livroElement);
-        }
-
-        // Adiciona a linha ao contêiner de livros
-        livrosContainer.appendChild(row);
-    };
-
-    //feito
-    getDetalheLivro = (idLivro) => {
         return new Promise((resolve, reject) => {
             var info = this;
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/detalhelivro/" + idLivro, true);
+            xhr.open("GET", "/livros", true);
             xhr.onreadystatechange = function () {
                 if ((this.readyState === 4) && (this.status === 200)) {
                     var response = JSON.parse(xhr.responseText);
                     response.data.forEach(function (current) {
-                        livros.push(current);
+                        info.livros.push(current);
                     });
                     resolve();
                 }
             };
             xhr.send();
         });
+    };
 
-
-        /*return new Promise((resolve, reject) => {
+    //feito
+    showLivros = () => {
+        this.getLivros().then(() => {
+            const livrosContainer = document.getElementById('listaLivros');
             var info = this;
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/detalhelivro/" + idLivro, true);
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-    
-                    if (response.data.length > 0) {
-                        var responseData = response.data[0];
-                        var livro = new Livro(responseData.idLivro, responseData.titulo, responseData.obra, responseData.personagem, responseData.pagina, responseData.autor, /*responseData.idGenero, responseData.livroGenero, responseData.imagem, responseData.gostos);
-                        info.livros.push(livro);
-                        resolve(livro);
-                    } else {
-                        reject("O livro não foi encontrado.");
-                    }
-                } else {
-                    reject("Erro na solicitação. Status: " + xhr.status);
-                }
-            };
-            xhr.send();
-        });*/
-    }
-
-    showDetalheLivro = (idLivro) => {
-        this.getDetalheLivro(idLivro).then(() => {
-            var livros = this.livros;
-
-            const livrosContainer = document.getElementById('detalheLivro');
-
-            for (let j=0; j < j < livros.length; j++) {
-                const livro = livros[j];
-            
+            //4 livros por cada row
+            for (let i = 0; i < info.livros.length; i += 4) {
                 const row = document.createElement('div');
                 row.className = 'row';
 
-                const livroElement = document.createElement('div');
-                livroElement.innerHTML = `
-                    <div class="col-lg-6">
-                        <div class="left-info">
-                            <div class="left">
-                                <h4>Classificação</h4>
-                                <span>Gostos</span>
-                            </div>
-                            <ul>
-                                <li id="classificacao"><i class="fa fa-star"></i> 5</li>
-                                <li id="gostosDL"><i class="fa fa-heart" aria-hidden="true"></i> 2.3M</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="right-info">
-                            <ul>                        
-                                <li id="autorDL"><i class="fa fa-heart" aria-hidden="true">${livro.autor}</i></li>
-                                <li id="paginasDL"><i class="fa fa-server">${livro.pagina}</i></li>
-                                <li id="generoDL"><i class="fa fa-book">${livro.livroGenero}</i></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <img id="imagemDL" src="assets/images/${livro.imagem}" alt="" style="border-radius: 23px; margin-bottom: 30px;">
-                    </div> 
-                    <div class="col-lg-8">
-                        <br>
-                        <h6 id="tituloDL">${livro.titulo}</h6>
-                        <p id="personagemDL">${livro.personagem}</p>
-                        <br><p>
-                        </p><h6>A Obra</h6>
-                        <p id="obraDL">${livro.obra}</p>
-                        <p></p><!--<br><br><br>
-                        <h6>Páginas: 184 <br>Autor Maurice Leblanc</h6>-->
-                    </div>
-                `;            
-            }  
-            
-            row.appendChild(livroElement);
-            livrosContainer.appendChild(row);
+                for (let j=i; j < i+4 && j < info.livros.length; j++) {
+                    const livro = info.livros[j];
 
-        }).catch((error) => {
-            console.error(error);
-        }); 
+                    const livroElement = document.createElement('div');
+                    livroElement.className = 'col-lg-3 col-sm-6';
+
+                    livroElement.innerHTML = `
+                        <div class="item">
+                            <div class="thumb">
+                                <img src="assets/images/${livro.imagem}" alt="">
+                                <div class="hover-effect">
+                                    <div class="content">
+                                        <div class="live">
+                                            <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); color: #fff; font-size: 14px;
+                                            padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;" onclick="info.adicionarBiblioteca(${livro.idLivro});">
+                                        </div>
+                                        <ul>
+                                            <li><a href="#"><i class="fa fa-book"></i> ${livro.livroGenero}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="down-content">
+                                <a href="details.html" onclick="info.getDetalheLivro(${livro.idLivro});">                                                 <span><i class="fa fa-check"></i> ${livro.autor}</span>
+                                    <h4 id="xpto">${livro.titulo}</h4>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    row.appendChild(livroElement);
+                }
+                livrosContainer.appendChild(row);
+            }
+        });        
+    };
+
+    
+    getDetalheLivro = (idLivro) => {
+        var info = this;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/detalhelivro/" + idLivro, true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                debugger;
+                console.log(response);
+                if (response.data.length > 0) {                    
+                    var responseData = response.data[0];  
+                    var livro = new Livro(responseData.autor, responseData.titulo, responseData.obra, responseData.personagem, responseData.pagina, responseData.autor, responseData.livroGenero, responseData.imagem);
+                    info.detalhes.push(livro);
+                } else {
+                    console.log("O livro não foi encontrado.");
+                }
+            } else {
+                console.log("Erro na solicitação. Status: " + xhr.status);
+            }
+        };
+        xhr.send();
+    };
+
+    showDetalheLivro = () => {
+        var info = this;
+        const livrosContainer = document.getElementById('detalheLivro');
+        console.log(info.detalhes.length);
+        const row = document.createElement('div');
+            row.className = 'row';
+
+        for (let j=0; j < j < this.detalhes.length; j++) {
+            const livro = info.detalhes[j];
+
+            const livroElement = document.createElement('div');
+            livroElement.innerHTML = `
+                <div class="col-lg-6">
+                    <div class="left-info">
+                        <div class="left">
+                            <h4>Classificação</h4>
+                            <span>Gostos</span>
+                        </div>
+                        <ul>
+                            <li id="classificacao"><i class="fa fa-star"></i> 5</li>
+                            <li id="gostosDL"><i class="fa fa-heart" aria-hidden="true"></i> 2.3M</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="right-info">
+                        <ul>                        
+                            <li id="autorDL"><i class="fa fa-heart" aria-hidden="true">${livro.autor}</i></li>
+                            <li id="paginasDL"><i class="fa fa-server">${livro.pagina}</i></li>
+                            <li id="generoDL"><i class="fa fa-book">${livro.livroGenero}</i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <img id="imagemDL" src="assets/images/${livro.imagem}" alt="" style="border-radius: 23px; margin-bottom: 30px;">
+                </div> 
+                <div class="col-lg-8">
+                    <br>
+                    <h6 id="tituloDL">${livro.titulo}</h6>
+                    <p id="personagemDL">${livro.personagem}</p>
+                    <br><p>
+                    </p><h6>A Obra</h6>
+                    <p id="obraDL">${livro.obra}</p>
+                    <p></p><!--<br><br><br>
+                    <h6>Páginas: 184 <br>Autor Maurice Leblanc</h6>-->
+                </div>
+            `; 
+            row.appendChild(livroElement);  
+        }     
+        
+        livrosContainer.appendChild(row);
     };
 
     //feito
@@ -323,8 +301,10 @@ class Information {
     };
 
     processingProfile = () => {
-        var idUser = localStorage.getItem('idUser');
+       /* var idUser = localStorage.getItem('idUser');
         var usernameElement = document.getElementById('usernameP');
+        var usernameElement = document.getElementById('qtdLivrosSalvos');
+
     
         console.log("Iniciando solicitação para o perfil do usuário com ID:", idUser);
     
@@ -362,11 +342,11 @@ class Information {
                 }
             }
         };
-        xhr.send();
+        xhr.send();*/
     };
     
-
-    showMinhaBiblioteca = async () => {
+    
+    /*showMinhaBiblioteca = async () => {
         try {
             // Aguarde a conclusão do processamento do perfil
             const perfil = await this.processingProfile();
@@ -394,5 +374,107 @@ class Information {
         } catch (error) {
             console.error(error);
         }
+    };*/
+
+    //feito
+    rankingLivros = () => {
+        var rankings = this.rankings;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/ranking", true);
+    xhr.onreadystatechange = function () {
+        if ((this.readyState === 4) && (this.status === 200)) {
+            var response = JSON.parse(xhr.responseText);
+
+            // Verifique se response.data está definido antes de tentar iterar sobre ele
+            if (response.data && Array.isArray(response.data)) {
+                response.data.forEach(function (current) {
+                    rankings.push(current);
+                });
+            }
+        }
     };
+    xhr.send();
+    }
+
+    showRanking = () => {
+        //document.getElementById("divRanking").style.display="block";
+
+        var rankings = this.rankings;
+
+        // Verifique se há dados no ranking
+        if (rankings.length > 0) {
+            // Seletor do elemento div onde a tabela será criada
+            var divRanking = document.getElementById("rankingTabela");
+
+            // Crie a tabela
+            var table = document.createElement("table");
+            table.className = "ranking-table"; // Adicione uma classe se desejar estilizar a tabela
+
+            // Cabeçalho da tabela
+            var thead = document.createElement("thead");
+            var headerRow = document.createElement("tr");
+            var headers = ["Livro", "Total de Vezes Adicionados"]; // Adicione mais cabeçalhos conforme necessário
+
+            headers.forEach(function (headerText) {
+                var th = document.createElement("th");
+                th.appendChild(document.createTextNode(headerText));
+                headerRow.appendChild(th);
+            });
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Corpo da tabela
+            var tbody = document.createElement("tbody");
+
+            rankings.forEach(function (ranking) {
+                var row = document.createElement("tr");
+
+                // Adicione mais células conforme necessário
+                var livroCell = document.createElement("td");
+                livroCell.appendChild(document.createTextNode(ranking.livro));
+                row.appendChild(livroCell);
+
+                var totalAdicoesCell = document.createElement("td");
+                totalAdicoesCell.appendChild(document.createTextNode(ranking.totalAdicoes));
+                row.appendChild(totalAdicoesCell);
+
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(tbody);
+
+            // Adicione a tabela ao divRanking
+            divRanking.innerHTML = "";
+            divRanking.appendChild(table);
+        } else {
+            // Se não houver dados no ranking, você pode exibir uma mensagem ou fazer outra ação
+            console.log("Sem dados de ranking para exibir.");
+        }
+
+    }
 }
+
+var info = new Information("divInformation");
+
+window.onload = function ()  {
+
+    info.processingProfile();
+    info.rankingLivros();
+    window.info = info;
+
+    if (window.location.pathname === '/index.html') {
+        info.showLivros();
+        window.info = info;
+    }
+
+    if (window.location.pathname === '/details.html') {
+        info.showDetalheLivro();
+        window.info = info;
+    }
+
+    /*if (window.location.pathname === '/profile.html') {
+        info.showDetalheLivro();
+        window.info = info;
+    }*/
+};

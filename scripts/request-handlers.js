@@ -107,6 +107,7 @@ const getDetalhesLivro = (req, res) => {
             res.json({"message": "Erro" });
         } else {            
             res.json({"message": "OK", "data": rows });
+            console.log(rows);
         }
     }); 
 }
@@ -159,6 +160,33 @@ const getPerilUser = (req, res) => {
     }); 
 }
 module.exports.getPerilUser = getPerilUser;
+
+
+const ranking = (req, res) => {
+    var connection = mysql.createConnection(options);
+    connection.connect(function (err) {
+        if (err) {
+            console.log('Erro ao conectar a base de dados:', err.message);
+        } else {
+            console.log('Conexão bem-sucedida a base de dados.');
+            console.log('Estado da conexão após conectar:', connection.state);
+        }
+    });
+    var query = mysql.format("SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicoes' FROM Livro JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro GROUP BY Livro.idLivro, Livro.titulo ORDER BY totalAdicoes DESC;");
+    connection.query(query, function (err, rows) {
+        connection.end(); 
+
+        if (err) {            
+            res.json({"message": "Erro" });
+        } else {            
+            res.json({"message": "OK", "data": rows });
+            console.log(rows);
+        }
+    }); 
+
+}
+module.exports.ranking = ranking;
+
 
 
 

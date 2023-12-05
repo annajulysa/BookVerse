@@ -38,7 +38,7 @@
                   <ul class="nav">
                     <li><a href="signin.html">LogOut</a></li>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="profile.html" class="active" onclick="javascript: info.processingProfile();">Profile <img src="assets/images/profile.png" alt=""></a></li>                      
+                    <li><a href="profile.html" class="active">Profile <img src="assets/images/profile.png" alt=""></a></li>                      
                   </ul>   
                   <a class="menu-trigger">
                       <span>Menu</span>
@@ -70,8 +70,8 @@
                 </div>
                 <div class="col-lg-4 align-self-center">
                   <ul>
-                    <li style="color: black;">Livros Salvos <span style="color: black;" id="qtdLivros">3</span></li>
-                    <li style="color: black;">- <span style="color: black;">-</span></li>                   
+                    <li style="color: black;">Livros Salvos <span style="color: black;" id="qtdLivrosSalvos">3</span></li>
+                    <input id="btnRanking" type="submit" value="Ranking" class="btnRanking" onclick="info.showRanking();"/>                   
                   </ul>
                 </div>
               </div>
@@ -90,6 +90,18 @@
               <h4><em>Sua Biblioteca de</em> Livros</h4>
             </div>
             <div id="minhaBibliot"></div>
+          </div>
+        </div>
+        <!-- ***** Gaming Library End ***** -->
+        <!-- ***** Gaming Library Start ***** -->
+        <div class="gaming-library profile-library" id="divRanking">
+          <div class="col-lg-12">
+            <div class="heading-section">
+              <h4><em>Ranking dos Livros</em> Mais adicionados</h4>
+            </div>
+            <div id="rankingTabela">
+
+            </div>
           </div>
         </div>
         <!-- ***** Gaming Library End ***** -->

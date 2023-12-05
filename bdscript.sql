@@ -33,6 +33,7 @@ create table Livro_User(
 	idLivroUser int auto_increment Primary key,
 	idLivro int not null,
 	idUser int not null,
+    dataAdicionado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	Constraint FK_LivroUser_user foreign key (idUser) 
 	references User(idUser),
 	Constraint FK_LivroUser_livro foreign key (idLivro)
@@ -73,20 +74,19 @@ INSERT INTO livro(titulo, obra, personagem, pagina, autor, genero, imagem) VALUE
 INSERT INTO livro(titulo, obra, personagem, pagina, autor, genero, imagem) VALUES ('Elon Musk', 'Quando Elon Musk era criança na África do Sul, ele era espancado regularmente por valentões. Um dia, um grupo o empurrou para baixo em alguns degraus de concreto e o chutou até que seu rosto se transformasse em uma bola de carne inchada. Ele ficou no hospital por uma semana. Mas as cicatrizes físicas foram menores em comparação com as emocionais infligidas por seu pai, um engenheiro, desonesto e fantasista carismático. O impacto de seu pai em sua psique perduraria.',
 																					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras scelerisque arcu neque, et interdum quam sagittis eget. Quisque id mattis nulla, nec finibus sapien. Mauris ultricies enim ut felis cursus, a sagittis purus pulvinar. Curabitur sodales elit at sodales eleifend. Curabitur et ante leo.',
 																					670, 'Walter Isaacson', 5, 'biografia.jpg');
-INSERT INTO livro(titulo, obra, personagem, pagina, autor, genero, imagem) VALUES ('', '', '', '', '');
 
-INSERT INTO Livro_User(idLivro, idUser) VALUES (1, 1);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 1);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (3, 1);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 2);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (1, 2);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (4, 3);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (1, 3);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (6, 3);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (5, 4);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 4);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (6, 5);
-INSERT INTO Livro_User(idLivro, idUser) VALUES (2, 5);
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (1, 1, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (2, 1, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (3, 1, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (2, 2, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (1, 2, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (4, 3, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (1, 3, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (6, 3, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (5, 4, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (2, 4, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (6, 5, NOW());
+INSERT INTO Livro_User(idLivro, idUser, dataAdicionado) VALUES (2, 5, NOW());
 
 
 Select * from user;
@@ -99,16 +99,14 @@ SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.
 SELECT l.idLivro, l.titulo, l.autor, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero;
 SELECT l.*, g.designacao as 'livroGenero' FROM livro l inner join genero g on l.genero = idGenero WHERE idLivro='1';
 SELECT U.idUser, U.username, U.email, LU.idLivro, L.titulo, L.autor, G.designacao as 'livroGenero' FROM Livro_User LU JOIN User U ON LU.idUser = U.idUser JOIN Livro L ON LU.idLivro = L.idLivro JOIN Genero G ON L.genero = G.idGenero where u.iduser = 1;
-SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicionados' FROM Livro 
-	JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro
-	GROUP BY Livro.idLivro, Livro.titulo
-	ORDER BY totalAdicoes DESC;
-    
-SELECT * FROM Livro_User;
-DELETE FROM Livro_User WHERE idUser = 3 AND idLivro = 6;
+SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicionados' FROM Livro JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro GROUP BY Livro.idLivro, Livro.titulo ORDER BY totalAdicionados DESC;
 
-SELECT L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao AS livroGenero, L.imagem FROM  Livro L
+
+SELECT * FROM Livro_User where idUser=3;
+DELETE FROM Livro_User WHERE idUser =3;
+
+SELECT L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao AS livroGenero, L.imagem, LU.dataAdicionado FROM  Livro L
 JOIN Livro_User LU ON L.idLivro = LU.idLivro
 JOIN Genero G ON L.genero = G.idGenero
 WHERE LU.idUser = 3
-GROUP BY L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao, L.imagem;
+order by LU.dataAdicionado;

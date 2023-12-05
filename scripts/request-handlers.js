@@ -221,7 +221,7 @@ const ranking = (req, res) => {
             console.log('Estado da conexão após conectar:', connection.state);
         }
     });
-    var query = mysql.format("SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicionados', MAX(Livro_User.dataAdicionado) AS 'dataAdicionado' FROM Livro JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro GROUP BY Livro.idLivro, Livro.titulo ORDER BY dataAdicionado DESC");
+    var query = mysql.format("SELECT Livro.titulo AS 'livro', COUNT(Livro_User.idLivroUser) AS 'totalAdicionados' FROM Livro JOIN Livro_User ON Livro.idLivro = Livro_User.idLivro GROUP BY Livro.idLivro, Livro.titulo ORDER BY totalAdicionados DESC");
     connection.query(query, function (err, rows) {
         connection.end(); 
 

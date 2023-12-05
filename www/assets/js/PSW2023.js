@@ -44,9 +44,8 @@ class Perfil {
 
 window.onload = (event) => {
     var info = new Information("divInformation");   
-    info.showLivros(); 
-    info.showMinhaBiblioteca();
-    //info.showDetalheLivro();
+    info.getLivros();
+    info.getDetalheLivro();
     window.info = info;
 };
 
@@ -57,6 +56,8 @@ class Information {
         this.users = [];
         this.livros = [];
         this.perfils = [];
+        this.userLivro = [];
+        this.detalhes = [];
     }
 
     // feito
@@ -136,74 +137,73 @@ class Information {
 
     //feito
     getLivros = () => {
-        return new Promise((resolve, reject) => {
-            var livros = this.livros;
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/livros", true);
-            xhr.onreadystatechange = function () {
-                if ((this.readyState === 4) && (this.status === 200)) {
-                    var response = JSON.parse(xhr.responseText);
+        var info = this;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/livros", true);
+        xhr.onreadystatechange = function () {
+            if ((this.readyState === 4) && (this.status === 200)) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.data) {
                     response.data.forEach(function (current) {
-                        livros.push(current);
+                        info.livros.push(current);
+                        info.showLivros();
                     });
-                    resolve();
                 }
-            };
-            xhr.send();
-        });
+            }
+        };
+        xhr.send();
     };
 
     //feito
     showLivros = () => {
-        this.getLivros().then(() => {
-            const livrosContainer = document.getElementById('listaLivros');
-            var livros = this.livros;
-            //4 livros por cada row
-            for (let i = 0; i < this.livros.length; i += 4) {
-                const row = document.createElement('div');
-                row.className = 'row';
+        var info = this;
+        const livrosContainer = document.getElementById('listaLivros');
+        
 
-                for (let j=i; j < i+4 && j < livros.length; j++) {
-                    const livro = livros[j];
+        const row = document.createElement('div');
+        row.className = 'row';
 
-                    const livroElement = document.createElement('div');
-                    livroElement.className = 'col-lg-3 col-sm-6';
+        for (let i = 0; i < info.livros.length; i++) {
+            const livro = info.livros[i];
 
-                    livroElement.innerHTML = `
-                        <div class="item">
-                            <div class="thumb">
-                                <img src="assets/images/${livro.imagem}" alt="">
-                                <div class="hover-effect">
-                                    <div class="content">
-                                        <div class="live">
-                                            <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); color: #fff; font-size: 14px;
-                                            padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;" onclick="info.adicionarBiblioteca(${livro.idLivro});">
-                                        </div>
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-book"></i> ${livro.livroGenero}</a></li>
-                                        </ul>
-                                    </div>
+            const livroElement = document.createElement('div');
+            livroElement.className = 'col-lg-3 col-sm-6';
+
+            livroElement.innerHTML = `
+                <div class="item">
+                    <div class="thumb">
+                        <img src="assets/images/${livro.imagem}" alt="">
+                        <div class="hover-effect">
+                            <div class="content">
+                                <div class="live">
+                                    <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); color: #fff; font-size: 14px;
+                                    padding: 5px 10px; border-radius: 23px; right: 15px; top: 15px; border: none;" onclick="info.adicionarBiblioteca(${livro.idLivro});">
                                 </div>
-                            </div>
-                            <div class="down-content">
-                                <a href="details.html?idLivro=${livro.idLivro}" onclick="info.showDetalheLivro(${livro.idLivro});">             
-                                    <span><i class="fa fa-check"></i> ${livro.autor}</span>
-                                    <h4 id="xpto">${livro.titulo}</h4>
-                                </a>
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-book"></i> ${livro.livroGenero}</a></li>
+                                </ul>
                             </div>
                         </div>
-                    `;
-                    row.appendChild(livroElement);
-                }
-                livrosContainer.appendChild(row);
-            }
-        });        
+                    </div>
+                    <div class="down-content">
+                        <a href="details.html?idLivro=${livro.idLivro}" onclick="info.showDetalheLivro(${livro.idLivro});">             
+                            <span><i class="fa fa-check"></i> ${livro.autor}</span>
+                            <h4 id="xpto">${livro.titulo}</h4>
+                        </a>
+                    </div>
+                </div>
+            `;      
+            row.appendChild(livroElement);
+        }
+
+        // Adiciona a linha ao contêiner de livros
+        livrosContainer.appendChild(row);
     };
 
     //feito
     getDetalheLivro = (idLivro) => {
         return new Promise((resolve, reject) => {
-            var livros = this.livros;
+            var info = this;
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "/detalhelivro/" + idLivro, true);
             xhr.onreadystatechange = function () {

@@ -410,7 +410,6 @@ class Information {
             }}
         }
         xhr.open("POST", "/adicionar", true);
-
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(dados));
     };
@@ -437,7 +436,7 @@ class Information {
                         userLivros.push(current);
                     });
     
-                    // Chame a função de callback para mostrar os dados após o carregamento
+                    // Chama a função de callback para mostrar os dados após o carregamento
                     if (info.getMinhaBibliotecaCallback) {
                         info.getMinhaBibliotecaCallback();
                     }

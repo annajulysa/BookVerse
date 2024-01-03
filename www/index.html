@@ -36,10 +36,10 @@
                   <!-- ***** Logo End ***** -->
                   <!-- ***** Menu Start ***** -->
                   <ul class="nav">
-                    <li><a href="signin.html">LogOut</a></li>                    
+                    <li><a href="signin.html" id="btnLogout">LogOut</a></li>                    
                     <li><a href="index.html" class="active">Home</a></li>                      
                     <li><a href="details.html">Details</a></li>                      
-                    <li><a href="profile.html">Profile <img src="assets/images/profile.png" alt=""></a></li>
+                    <li><a href="profile.html" onclick="info.processingProfile();">Profile <img src="assets/images/profile.png" alt=""></a></li>
                   </ul>   
                   <a class="menu-trigger">
                       <span>Menu</span>
@@ -75,40 +75,9 @@
             <div class="heading-section">              
             </div>
           </div> 
-
-
-
           <div id="divInformation">
             <div id="listaLivros"></div>
-          </div>         
-          
-          <div class="row">            
-            <div class="col-lg-3 col-sm-6">
-              <div class="item">
-                <div class="thumb">
-                  <img src="assets/images/Lupin.jpg" alt="">
-                  <div class="hover-effect">
-                    <div class="content">
-                      <div class="live">
-                        <input type="button" title="ADD" value="ADD" style="position: absolute; background-color: rgb(224 89 85); padding: 5px 10px;
-                        border-radius: 23px; color: #fff; font-size: 14px; right: 15px; top: 15px; border: none;">
-                        <!--<a href="#">ADD</a>-->
-                      </div>
-                      <ul>                        
-                        <li><a href="#"><i class="fa fa-book"></i> POLICIAL </a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="down-content">
-                  <a href="details.html?">             
-                    <span><i class="fa fa-check"></i> Kengan Omeg</span>
-                    <h4>Just Talking With Fans</h4>
-                  </a>      
-                </div> 
-              </div>
-            </div>
-          </div>
+          </div>       
         </div>
       </div>
     </div>

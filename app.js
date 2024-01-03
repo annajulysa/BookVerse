@@ -16,14 +16,15 @@ app.use(express.static("www"));
 
 
 // routing
-app.post("/logins", requestHandlers.validaLogin);
-app.post("/registars", requestHandlers.registarUser); 
+app.post("/logins", requestHandlers.validaLogin); //Esta rota trata as solicitações de login. validaLogin é a função que valida as credenciais
+app.post("/registars", requestHandlers.registarUser); //solicitações de registro de usuários.
+app.get("/utilizador/:id", requestHandlers.getLivrosUser); //busca os livros associados ao utilizador logado
+app.get("/ranking", requestHandlers.ranking); //Busca as informações de ranking de livros
 app.get("/livros", requestHandlers.getLivros); // apresentar todos os livros da bd
 app.get("/detalhelivro/:id", requestHandlers.getDetalhesLivro); // apresentar os detalhes do livro
-/*app.post("/adicionar", requestHandlers.adicionarBiblioteca);
-app.put("/utilizador/:id", requestHandlers.atualizarUser); //atualizar no no user
-app.get("/utilizador/:id/livros/:id", requestHandlers.getLivrosUser); //apresentar todos os livros da minha biblioteca
-app.delete("/utilizador/:id/livros/:id", requestHandlers.removerLivro); // remover livro da minha biblioteca*/
+app.post("/adicionar", requestHandlers.adicionarBiblioteca); // Adiciona um/os livros a tabela userLivro referindo o id do utilizador e o id do livro
+//app.get("/utilizador/:id/livros/:id", requestHandlers.getLivrosUser); //apresentar todos os livros da minha biblioteca
+app.delete("/utilizador/:idUser/livros/:idLivro", requestHandlers.removerLivro); // remover livro da minha biblioteca 
 
 
 // start server

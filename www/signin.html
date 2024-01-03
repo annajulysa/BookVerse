@@ -9,7 +9,6 @@
     <div class="wrapper">
         <div class="inner">
             <img src="assets/images/image-1.png" alt="" class="image-1">
-            <div id="divInformation"></div>
             <form id="formLogin" action="javascript: info.processingLogin();">
                 <input id="idLogin" type="hidden"/>
                 <h3>Login</h3>
@@ -24,9 +23,9 @@
                 
                 <div class="form-holder">
                     <span class="lnr lnr-lock"></span>
-                    <input type="password" id="passwordL" class="form-control" placeholder="Password">
+                    <input type="password" id="passwordL" class="form-control" placeholder="Password" required>
                 </div>
-                <input class="btn" id="Save" type="submit" value="LOGIN" />
+                <input class="btn" id="Save" type="submit" value="LOGIN" href="javascript: info.getLivros();" required/>
                 <div>
 					<a href="signup.html">
 					<p style="background: none; color: #b25546; text-align: right; margin-top: 40px;" >CRIAR CONTA</p>

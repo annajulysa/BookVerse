@@ -36,13 +36,13 @@
                   <!-- ***** Logo End ***** -->
                   <!-- ***** Menu Start ***** -->
                   <ul class="nav">
-                    <li><a href="signin.html">LogOut</a></li>
+                    <li><a href="signin.html" id="btnLogout">LogOut</a></li>
 
                     <li><a href="index.html">Home</a></li>
                     
                     <li><a href="details.html" class="active">Details</a></li>
                     
-                    <li><a href="profile.html">Profile <img src="assets/images/profile.png" alt=""></a></li>
+                    <li><a href="profile.html" onclick="info.processingProfile();">Profile <img src="assets/images/profile.png" alt=""></a></li>
                   </ul>   
                   <a class="menu-trigger">
                       <span>Menu</span>
@@ -66,43 +66,7 @@
                 <div class="heading-section">
                   <h4 id="tituloDL"><em>Cavaleiro Ladrão</em> Lupin</h4>
                 </div>
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="left-info">
-                      <div class="left">
-                        <h4>Classificação</h4>
-                        <span>Gostos</span>
-                      </div>
-                      <ul>
-                        <li id="classificacao"><i class="fa fa-star"></i> 5</li>
-                        <li id="gostosDL"><i class="fa fa-heart" aria-hidden="true"></i> 2.3M</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="right-info">
-                      <ul>                        
-                        <li id="autorDL"><i class="fa fa-heart" aria-hidden="true"></i></li>
-                        <li id="paginasDL"><i class="fa fa-server"></i></li>
-                        <li id="generoDL"><i class="fa fa-book"></i></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-4">
-                    <img id="imagemDL" src="assets/images/Lupin.jpg" alt="" style="border-radius: 23px; margin-bottom: 30px;">
-                  </div>                 
-                  
-                  <div class="col-lg-8">
-                    <br>
-                    <h6 id="tituloDL"></h6>
-                    <p id="personagemDL"></p>
-                    <br><p>
-                      </p><h6>A Obra</h6>
-                      <p id="obraDL"></p>
-                    <p></p><!--<br><br><br>
-                    <h6>Páginas: 184 <br>Autor Maurice Leblanc</h6>-->
-                  </div>                  
-                </div>
+                <div id="detalheLivro"></div>     
               </div>
             </div>
           </div>

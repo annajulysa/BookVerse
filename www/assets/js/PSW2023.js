@@ -137,7 +137,7 @@ class Information {
                     }
                 }
                 // Configura a solicitação POST para o servidor
-                xhr.open("POST", "/registars", true);
+                xhr.open("POST", "/user", true);
             }
             // Envia a solicitação para o servidor, incluindo os dados do novo utilizador em formato JSON
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -216,7 +216,7 @@ class Information {
         return new Promise((resolve, reject) => {
             var info = this;
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/livros", true);
+            xhr.open("GET", "/livro", true);
             xhr.onreadystatechange = function () {
                 if ((this.readyState === 4) && (this.status === 200)) {
                     var response = JSON.parse(xhr.responseText);
@@ -296,7 +296,7 @@ class Information {
     getDetalheLivro = (idLivro) => {
         var info = this;
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/detalhelivro/" + idLivro, true);
+        xhr.open("GET", "/livro/" + idLivro, true);
         xhr.onload = function () {
             if (xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
@@ -409,7 +409,7 @@ class Information {
                 console.error("Mensagem de erro do servidor: " + xhr.responseText);
             }}
         }
-        xhr.open("POST", "/adicionar", true);
+        xhr.open("POST", "/livro", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(dados));
     };
@@ -424,7 +424,7 @@ class Information {
         var userLivros = this.userLivros;
         var idUser = localStorage.getItem('idUser');
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/utilizador/" + idUser, true);
+        xhr.open("GET", "/user/" + idUser, true);
         xhr.onreadystatechange = function () {
             if ((this.readyState === 4) && (this.status === 200)) {
                 var response = JSON.parse(xhr.responseText);
@@ -493,7 +493,7 @@ class Information {
         var idUser = localStorage.getItem('idUser');
         var info = this;
         var xhr = new XMLHttpRequest();
-        xhr.open("DELETE", "/utilizador/"+ idUser +"/livros/"+ idLivro, true);
+        xhr.open("DELETE", "/user/"+ idUser +"/livro/"+ idLivro, true);
         xhr.onreadystatechange = function () {
             if ((this.readyState === 4) && (this.status === 200)) {
                 // Remove o livro do array userLivros com id do livro

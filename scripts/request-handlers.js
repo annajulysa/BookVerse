@@ -266,17 +266,60 @@ const removerLivro = (req, res) => {
             console.log(rows);
         }
     });
-
-
 }
 module.exports.removerLivro = removerLivro;
 
 
-const atualizarUser = (req, res) => {
+const editarUser = (req, res) => {
+    var idUser = req.params.idUser;
 
+    var connection = mysql.createConnection(options);
+    connection.connect(function (err) {
+        if (err) {
+            console.log('Erro ao conectar a base de dados:', err.message);
+        } else {
+            console.log('Conexão bem-sucedida a base de dados.');
+            console.log('Estado da conexão após conectar:', connection.state);
+        }
+    });
+    var query = mysql.format("DELETE FROM User WHERE idUser=?;", idUser);
+        connection.query(query, function (err, rows) {
+        connection.end(); 
+
+        if (err) {            
+            res.json({"message": "Erro" });
+        } else {            
+            res.json({"message": "OK", "data": rows });
+            console.log(rows);
+        }
+    });
 }
-module.exports.atualizarUser = atualizarUser;
+module.exports.editarUser = editarUser;
 
+const removerUser = (req, res) => {
+    var idUser = req.params.idUser;
 
+    var connection = mysql.createConnection(options);
+    connection.connect(function (err) {
+        if (err) {
+            console.log('Erro ao conectar a base de dados:', err.message);
+        } else {
+            console.log('Conexão bem-sucedida a base de dados.');
+            console.log('Estado da conexão após conectar:', connection.state);
+        }
+    });
+    var query = mysql.format("DELETE FROM User WHERE idUser=?;", idUser);
+        connection.query(query, function (err, rows) {
+        connection.end(); 
+
+        if (err) {            
+            res.json({"message": "Erro" });
+        } else {            
+            res.json({"message": "OK", "data": rows });
+            console.log(rows);
+        }
+    });
+}
+module.exports.removerUser = removerUser;
 
 

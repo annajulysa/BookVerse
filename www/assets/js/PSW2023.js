@@ -206,6 +206,18 @@ class Information {
 
     }
 
+    removerUser() {
+        var idUser = localStorage.getItem('idUser');
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", "/user/"+ idUser, true);
+        xhr.onreadystatechange = function () {
+            if ((this.readyState === 4) && (this.status === 200)) {
+                logout();
+            }
+        };
+        xhr.send();
+    }
+
     //feito
     /**
      * Função assíncrona para obter todos os dados dos livros do servidor.

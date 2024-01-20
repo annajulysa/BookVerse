@@ -104,7 +104,7 @@ class Information {
      * Função que regista o utilizador na base de dados atraves do petodo POST e depois é redirecionado para a pagina login, para assim conseguir aceder ao site
      * Nesta função também é feito a validação das passwords para assim finalizar a função
      * @memberof Information
-     * @param {string} acao - Ação a ser executada, por exemplo, "create" para criar um novo usuário.
+     * @param {string} acao - Ação a ser executada, por exemplo, "create" para criar um novo utilizador.
      */
     registarUser = (acao) => {
         // Referência à instância da classe Information
@@ -156,13 +156,10 @@ class Information {
      */
     processingLogin() {        
         var info = this;
-        // Obtém os valores dos campos de ID, e-mail e senha do formulário de login
-        var id = document.getElementById("idLogin").value;
+        // Obtém os valores dos campos email e senha do formulário de login        
         var email = document.getElementById("emailL").value;
         var pass = document.getElementById("passwordL").value;
-        
-        var dados = {id:id, email: email, pass: pass};
-        
+               
         var xhr = new XMLHttpRequest();
         xhr.responseType="json";              
     
@@ -176,11 +173,11 @@ class Information {
                         var responseData = xhr.response[0];
                         // Cria uma instância do objeto User com os dados do utilizador
                         var response = new User(responseData.idUser, responseData.username, responseData.email, responseData.pass);
-                        // Adiciona o usuário à lista de usuários na instância da classe Information
+                        // Adiciona o utilizador à lista de utilizadors na instância da classe Information
                         info.users.push(response);
-                        // Armazena o id do usuário no armazenamento local
-                        localStorage.setItem('idUser', response.idUser);
-
+                        // Armazena o id do utilizador no armazenamento local
+                        localStorage.setItem('idUser', response.idUser);                        
+                        localStorage.setItem('username', response.username);                        
                         window.location.href = 'index.html';
                         // Exibe todos os livros da bd após o login
                         info.showLivros();
@@ -195,15 +192,19 @@ class Information {
                     console.error("Erro durante a solicitação. Código: " + this.status);
                     console.error("Mensagem de erro do servidor: " + xhr.responseText);
                 }
-            }              
+            }   
         }
-        // Configura a solicitação POST para o endpoint /logins no servidor
-        xhr.open("POST", "/logins", true);    
+        // Configura a solicitação POST para o endpoint /user no servidor
+        xhr.open('GET', `/user?email=${email}&password=${pass}`, true);    
         // Define o cabeçalho Content-Type da solicitação como application/json
         xhr.setRequestHeader('Content-Type', 'application/json');
-        // Envia os dados do usuário (convertidos para JSON) para o servidor
-        xhr.send(JSON.stringify(dados));   
+        // Envia os dados do utilizador
+        xhr.send();
     };
+
+    editarUser() {
+
+    }
 
     //feito
     /**
@@ -397,9 +398,10 @@ class Information {
                     //var livroUser = new LivroUser(idLivro, idUser, dataAdicionado);
                     //info.userLivro.push(livroUser);
                     console.log("Adicionado");
+                    alert("Adicionado à biblioteca");
                 } else if (response.message === "Já adicionado à biblioteca") {
                     // livro já está na biblioteca
-                    alert("Livro já adicionado à biblioteca");
+                    alert("Já existente na biblioteca");
                 } else {
                     console.error("Erro durante a solicitação. Mensagem do servidor: " + response.message);
                 }
@@ -424,6 +426,10 @@ class Information {
         var userLivros = this.userLivros;
         var idUser = localStorage.getItem('idUser');
         var xhr = new XMLHttpRequest();
+
+        var username = localStorage.getItem('username');
+        document.getElementById("namePerfil").textContent = username;
+
         xhr.open("GET", "/user/" + idUser, true);
         xhr.onreadystatechange = function () {
             if ((this.readyState === 4) && (this.status === 200)) {
@@ -639,6 +645,7 @@ function isAuthenticated() {
 function logout() {
     // Remover dados de sessão
     localStorage.removeItem('idUser');
+    localStorage.removeItem('username');
     // Redirecionar para a página de login (ou outra página)
     window.location.href = 'signin.html';
 }

@@ -17,6 +17,8 @@ app.use(express.static("www", {index:'signin.html'}));
 
 // routing
 
+app.get("/user", requestHandlers.validaLogin); //Esta rota trata as solicitações de login. validaLogin é a função que valida as credenciais
+
 app.post("/logins", requestHandlers.validaLogin); //Esta rota trata as solicitações de login. validaLogin é a função que valida as credenciais
 app.post("/user", requestHandlers.registarUser); //solicitações de registro de usuários.
 app.get("/user/:id", requestHandlers.getLivrosUser); //busca os livros associados ao utilizador logado

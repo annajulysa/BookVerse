@@ -37,8 +37,8 @@ module.exports.registarUser = registarUser;
  * @param {Object} res resposta do servidor
  */
 const validaLogin = (req, res) => {
-    var email = req.body.email;
-    var pass = req.body.pass;
+    var email = req.query.email;
+    var pass = req.query.password;
 
     var connection = mysql.createConnection(options);
     connection.connect((err) => {
@@ -62,9 +62,9 @@ const validaLogin = (req, res) => {
             } else {
                 if (rows.length > 0) {
                     console.log(JSON.stringify(rows));
-                    res.status(200).json(rows); // Retorna os dados do usuário
+                    res.status(200).json(rows); // Retorna os dados do utilizador
                 } else {
-                    res.sendStatus(401); // Não autorizado (usuário não encontrado)
+                    res.sendStatus(401); // Não autorizado (utilizador não encontrado)
                 }
             }
         });

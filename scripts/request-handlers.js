@@ -272,6 +272,9 @@ module.exports.removerLivro = removerLivro;
 
 const editarUser = (req, res) => {
     var idUser = req.params.idUser;
+    var username;
+    var email;
+    var password;
 
     var connection = mysql.createConnection(options);
     connection.connect(function (err) {
@@ -282,7 +285,7 @@ const editarUser = (req, res) => {
             console.log('Estado da conexão após conectar:', connection.state);
         }
     });
-    var query = mysql.format("DELETE FROM User WHERE idUser=?;", idUser);
+    var query = mysql.format("UPDATE user SET username=?, email=?, pass=? WHERE idUser=?;", [username, email, password, idUser]);
         connection.query(query, function (err, rows) {
         connection.end(); 
 

@@ -177,7 +177,7 @@ class Information {
                         info.users.push(response);
                         // Armazena o id do utilizador no armazenamento local
                         localStorage.setItem('idUser', response.idUser);                        
-                        localStorage.setItem('username', response.username);                        
+                        localStorage.setItem('username', response.username);                   
                         window.location.href = 'index.html';
                         // Exibe todos os livros da bd após o login
                         info.showLivros();
@@ -202,10 +202,118 @@ class Information {
         xhr.send();
     };
 
+    //feito
     editarUser() {
+        showEdicao();
+        
+        var idUser = localStorage.getItem('idUser');        
+        var info = this;
+
+        var xhr = new XMLHttpRequest();
+        xhr.responseType="json";              
+    
+        xhr.onreadystatechange = function () {        
+            if (this.readyState == XMLHttpRequest.DONE) {
+                if (this.status === 200) {      
+                    // Verifica se a resposta do servidor é um array não vazio
+                    if (xhr.response && xhr.response.length > 0) {
+                        var responseData = xhr.response[0];
+                        // Cria uma instância do objeto User com os dados do utilizador
+                        var response = new User(responseData.idUser, responseData.username, responseData.email, responseData.pass);
+                        // Adiciona o utilizador à lista de utilizadors na instância da classe Information
+                        info.users.push(response);   
+
+                        document.getElementById('username').value = response.username;
+                        document.getElementById('email').value = response.email;
+                        document.getElementById('password').value = response.pass;
+                        document.getElementById('passwordConf').value = "";
+
+                    } else {
+                        // Exibe um erro se a resposta do servidor estiver vazia ou não estiver no formato esperado
+                        console.error("Erro: A resposta do servidor está vazia ou não está no formato esperado.");
+                    }
+                } else {
+                    console.error("Erro durante a solicitação. Código: " + this.status);
+                    console.error("Mensagem de erro do servidor: " + xhr.responseText);
+                }
+            }   
+        }
+        // Configura a solicitação POST para o endpoint /user no servidor
+        xhr.open("GET", "/user/" + idUser, true);
+        // Define o cabeçalho Content-Type da solicitação como application/json
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        // Envia os dados do utilizador
+        xhr.send();
 
     }
 
+    //feito
+    saveUpdate() {
+        document.getElementById("divEditar").style.display = "none";
+        document.getElementById("divMinhaBiblioteca").style.display = "block";
+        document.getElementById("btnRanking").disabled  = false; 
+        document.getElementById("btnRanking").style.background = "#cb7474";
+
+        const username = document.getElementById('username').value;
+		const email = document.getElementById('email').value;
+		const password = document.getElementById('password').value;
+		const passwordConf = document.getElementById('passwordConf').value;
+        var idUser = localStorage.getItem('idUser');
+
+        // Cria um objeto com os dados atualizados do utilizador
+        var dados = {username: username, email: email, password: password}; 
+        
+        // Verifica se as senhas coincidem
+        if(password === passwordConf)
+        {
+            // Cria uma instância do objeto XMLHttpRequest para realizar solicitações assíncronas
+            var xhr = new XMLHttpRequest();        
+            xhr.responseType="json";
+
+            xhr.open("PUT", "/user/" + idUser, true);
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== XMLHttpRequest.DONE) {
+                    return;
+                }
+            
+                if (xhr.status === 200) {
+                    localStorage.setItem('username', username);
+                    document.getElementById('namePerfil').textContent = username;
+
+                    console.log("Atualizado");
+                    alert("Dados Atualizados"); 
+
+                } else if (xhr.status === 400) {
+                    // Tratar a resposta do servidor quando o status for 400 (Bad Request)                    
+                    alert("Preencha todos os campos!");
+                    info.editarUser();
+                    console.error("Erro 400: Requisição inválida.");
+                } else {
+                    // Outros status de resposta do servidor
+                    console.error("Erro: O servidor retornou um status inesperado - " + xhr.status);
+                    alert("Erro: O servidor retornou um status inesperado - " + xhr.status);
+                }
+            };
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(dados));
+
+        } else {
+            // Se as passwords não coincidirem, exibe um alerta
+            alert("Passwords não compativeis!");
+            info.editarUser();        
+        }               
+    }
+
+    //feito
+    cancelOnClick() {
+        document.getElementById("divEditar").style.display = "none";
+        document.getElementById("divMinhaBiblioteca").style.display = "block";
+        document.getElementById("btnRanking").disabled  = false; 
+        document.getElementById("btnRanking").style.background = "#cb7474";
+    }
+
+    //feito
     removerUser() {
         var idUser = localStorage.getItem('idUser');
         var xhr = new XMLHttpRequest();
@@ -442,7 +550,7 @@ class Information {
         var username = localStorage.getItem('username');
         document.getElementById("namePerfil").textContent = username;
 
-        xhr.open("GET", "/user/" + idUser, true);
+        xhr.open("GET", "/user/" + idUser + "/livro", true);
         xhr.onreadystatechange = function () {
             if ((this.readyState === 4) && (this.status === 200)) {
                 var response = JSON.parse(xhr.responseText);
@@ -672,3 +780,12 @@ document.addEventListener('DOMContentLoaded', function () {
         logoutButton.addEventListener('click', logout);
     }
 });
+
+function showEdicao() {
+    document.getElementById("psinvalida").style.display = "none";
+    document.getElementById("divEditar").style.display = "block";
+    document.getElementById("divMinhaBiblioteca").style.display = "none";
+    document.getElementById("divRanking").style.display = "none";
+    document.getElementById("btnRanking").disabled  = true;
+    document.getElementById("btnRanking").style.background = "#6f4e4e52";        
+}

@@ -73,7 +73,6 @@
                   <ul>
                     <li style="color: black;"><input id="btnEditarP" type="submit" value="Editar Perfil" class="btnRanking" onclick="info.editarUser();"/></li>
                     <li style="color: black;"><input id="btnRanking" type="submit" value="Gerar Ranking" class="btnRanking" onclick="info.showRanking();"/></li>         
-                    <li style="color: black;"><input id="btnDeletarP" type="submit" value="Deletar Perfil" class="btnRanking" style="background-color: black; color: red;" onclick="info.removerUser();"/></li>
                   </ul>
                 </div>
               </div>
@@ -86,24 +85,41 @@
         </div>
         <!-- ***** Banner End ***** -->
         <!-- ***** Gaming Library Start ***** /*style="display:none"-->
-        <div class="gaming-library profile-library" id="divRanking" >
+        <div class="gaming-library profile-library" id="divEditar" style="display:none">
           <div class="col-lg-12">
             <div class="heading-section">
               <h4>Informações User</h4>
             </div>
-            <div id="editarPerfil">
-              Username <input type="text">
-              Email <input type="text">
-              Password <input type="text"><br><br>
-              <button id="btnEditar"> Salvar </button>
-              <button id="btnCancelar"> Cancelar </button>
+            <div class="info-box">
+              <div class="input-group">
+                <label class="input-group-label" >Username</label>
+                <input class="input-group-input" id="username" type="text" required></input>
+              </div>
+              <div class="input-group">
+                <label class="input-group-label" >Email</label>
+                <input class="input-group-input" id="email" type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required></input>
+              </div>
+              <div class="input-group">
+                <label class="input-group-label">Password</label>
+                <input class="input-group-input" id="password" type="password" required></input>
+              </div>
+              <div class="input-group">
+                <label class="input-group-label">Confirmar Password</label>
+                <input class="input-group-input" id="passwordConf" type="password" required></input>
+                <p id="psinvalida" style="color: red; display: none;" >Password Invalidas</p>
+                <p id="dtinvalidos" style="color: red; display: none;" >Preencha todos os campos</p>
+              </div>                
             </div>
+          </br>
+            <button id="buttonsave" type="submit" onclick="info.saveUpdate()">Salvar</button>
+            <button id="buttoncancel" onclick="info.cancelOnClick()">Cancelar</button>
+            <button id="buttondelete" onclick="info.removerUser();">Deletar Conta</button>            
           </div>
-          </div>
-          <!-- ***** Gaming Library End ***** -->
+        </div>
+        <!-- ***** Gaming Library End ***** -->
         <!-- ***** Gaming Library Start ***** -->
         <div class="gaming-library profile-library" id="divRanking" style="display:none">
-        <div class="col-lg-12">~
+        <div class="col-lg-12">
           <div class="heading-section">
             <h4><em>Ranking dos Livros</em> Mais adicionados</h4>
           </div>
@@ -113,7 +129,7 @@
         </div>
         <!-- ***** Gaming Library End ***** -->              
         <!-- ***** Gaming Library Start ***** -->
-        <div class="gaming-library profile-library">
+        <div class="gaming-library profile-library" id="divMinhaBiblioteca">
           <div class="col-lg-12">
             <div class="heading-section">
               <h4><em>Sua Biblioteca de</em> Livros</h4>

@@ -72,6 +72,41 @@ const validaLogin = (req, res) => {
 }
 module.exports.validaLogin = validaLogin;
 
+const infoUser = (req, res) => {
+    var idUser = req.params.idUser;
+
+    var connection = mysql.createConnection(options);
+    connection.connect((err) => {
+        if (err) {
+            console.log('Erro ao conectar a base de dados:', err.message);
+            res.sendStatus(500); // Internal Server Error
+            return;
+        }
+
+        console.log('Conexão bem-sucedida a base de dados.');
+        console.log('Estado da conexão após conectar:', connection.state);
+
+        const query = mysql.format("SELECT * FROM user WHERE idUser=?", idUser);
+        
+        connection.query(query, (err, rows) => {
+            connection.end(); // Fecha a conexão após a execução da consulta
+
+            if (err) {
+                console.error('Erro durante a consulta:', err.message);
+                res.sendStatus(500); // Internal Server Error
+            } else {
+                if (rows.length > 0) {
+                    console.log(JSON.stringify(rows));
+                    res.status(200).json(rows); // Retorna os dados do utilizador
+                } else {
+                    res.sendStatus(401); // Não autorizado (utilizador não encontrado)
+                }
+            }
+        });
+    });
+}
+module.exports.infoUser = infoUser;
+
 /**
  * Função para retornar a lista de livros da BD.
  * 
@@ -191,7 +226,7 @@ const getLivrosUser = (req, res) => {
             console.log('Estado da conexão após conectar:', connection.state);
         }
     });
-    var query = mysql.format("SELECT L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao AS livroGenero, L.imagem, LU.dataAdicionado FROM  Livro L JOIN Livro_User LU ON L.idLivro = LU.idLivro JOIN Genero G ON L.genero = G.idGenero WHERE LU.idUser=? order by LU.dataAdicionado;", idUser);
+    var query = mysql.format("SELECT L.idLivro, LU.idUser, L.titulo, L.autor, G.designacao AS livroGenero, L.imagem, DATE_FORMAT(LU.dataAdicionado, '%d/%m/%Y') AS dataAdicionado FROM  Livro L JOIN Livro_User LU ON L.idLivro = LU.idLivro JOIN Genero G ON L.genero = G.idGenero WHERE LU.idUser=? order by LU.dataAdicionado;", idUser);
         connection.query(query, function (err, rows) {
         connection.end(); 
 
@@ -272,32 +307,44 @@ module.exports.removerLivro = removerLivro;
 
 const editarUser = (req, res) => {
     var idUser = req.params.idUser;
-    var username;
-    var email;
-    var password;
+    var username = req.body.username;
+    var email = req.body.email;
+    var password = req.body.password;
+
+    // Verificar se todos os campos estão preenchidos
+    if (!username || !email || !password) {
+        return res.status(400).json({ "message": "Todos os campos devem ser preenchidos." });
+    }
 
     var connection = mysql.createConnection(options);
     connection.connect(function (err) {
         if (err) {
             console.log('Erro ao conectar a base de dados:', err.message);
+            return res.status(500).json({ "message": "Erro ao conectar a base de dados." });
         } else {
             console.log('Conexão bem-sucedida a base de dados.');
             console.log('Estado da conexão após conectar:', connection.state);
         }
     });
-    var query = mysql.format("UPDATE user SET username=?, email=?, pass=? WHERE idUser=?;", [username, email, password, idUser]);
-        connection.query(query, function (err, rows) {
-        connection.end(); 
 
-        if (err) {            
-            res.json({"message": "Erro" });
-        } else {            
-            res.json({"message": "OK", "data": rows });
+    var query = mysql.format("UPDATE user SET username=?, email=?, pass=? WHERE idUser=?;", [username, email, password, idUser]);
+    
+    connection.query(query, function (err, rows) {
+        connection.end();
+
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ "message": "Erro ao executar a consulta." });
+        } else {
+            console.log(JSON.stringify(rows));
+            res.json({ "message": "OK", "data": rows });
             console.log(rows);
         }
     });
 }
+
 module.exports.editarUser = editarUser;
+
 
 const removerUser = (req, res) => {
     var idUser = req.params.idUser;

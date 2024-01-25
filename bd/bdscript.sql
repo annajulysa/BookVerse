@@ -37,7 +37,7 @@ create table Livro_User(
 	Constraint FK_LivroUser_user foreign key (idUser) 
 	references User(idUser) ON DELETE CASCADE,
 	Constraint FK_LivroUser_livro foreign key (idLivro)
-	references Livro(idLivro)
+	references Livro(idLivro) ON DELETE CASCADE
 );
 
 Select * from user;

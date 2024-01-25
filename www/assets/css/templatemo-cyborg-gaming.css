@@ -1875,3 +1875,23 @@ body {
     background-color: #c9141d;
   }
 }
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.ranking-table th, .ranking-table td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.ranking-table th {
+  background-color: #f2f2f2;
+}
+
+.ranking-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}

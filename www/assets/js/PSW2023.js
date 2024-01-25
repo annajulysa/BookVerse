@@ -203,7 +203,13 @@ class Information {
     };
 
     //feito
+    /**
+     * Função para buscar dados e preencher os campos com os dados do utilizador.
+     * Envia uma solicitação GET ao servidor Node.js para obter os dados do utilizador.
+     * Atualiza os campos do formulário com os dados obtidos.
+     */
     editarUser() {
+        //Chama a função showEdicao() para exibir o formulário de edição
         showEdicao();
         
         var idUser = localStorage.getItem('idUser');        
@@ -248,12 +254,19 @@ class Information {
     }
 
     //feito
+    /**
+     * Função para salvar as alteraçoes de informação do utilizador.
+     * Envia uma solicitação assíncrona PUT ao servidor Node.js para atualizar as informações do utilizador.
+     */
     saveUpdate() {
+        //Oculta a div de edição e exibe a div da biblioteca.
         document.getElementById("divEditar").style.display = "none";
         document.getElementById("divMinhaBiblioteca").style.display = "block";
+        //Habilita o botão de ranking e ajusta seu estilo.
         document.getElementById("btnRanking").disabled  = false; 
         document.getElementById("btnRanking").style.background = "#cb7474";
 
+        //Obtém e valida os dados do formulário de edição.
         const username = document.getElementById('username').value;
 		const email = document.getElementById('email').value;
 		const password = document.getElementById('password').value;
@@ -306,6 +319,9 @@ class Information {
     }
 
     //feito
+    /**
+     * Função responsavel por apresentar funcionalidades que foram "escondidas" quando o utilizador clicou no botão EDITAR PERFIL
+     */ 
     cancelOnClick() {
         document.getElementById("divEditar").style.display = "none";
         document.getElementById("divMinhaBiblioteca").style.display = "block";
@@ -314,6 +330,10 @@ class Information {
     }
 
     //feito
+    /**
+     * Função para DELETAR os dados do utilizador da base de dados.
+     * Envia uma solicitação DELETE para o endpoint "/user/{idUser}" de forma assíncrona.
+     */
     removerUser() {
         var idUser = localStorage.getItem('idUser');
         var xhr = new XMLHttpRequest();
@@ -781,6 +801,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+/**
+ * Função responsavel por "esconder" algumas funcionalidades e apresentar o card com os componentes de edição das informaçoes do utilizador
+ */ 
 function showEdicao() {
     document.getElementById("psinvalida").style.display = "none";
     document.getElementById("divEditar").style.display = "block";

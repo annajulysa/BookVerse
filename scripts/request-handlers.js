@@ -304,7 +304,12 @@ const removerLivro = (req, res) => {
 }
 module.exports.removerLivro = removerLivro;
 
-
+/**
+ * Função que permite editar as informaçoes do utilizador utilizador
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const editarUser = (req, res) => {
     var idUser = req.params.idUser;
     var username = req.body.username;
@@ -345,7 +350,12 @@ const editarUser = (req, res) => {
 
 module.exports.editarUser = editarUser;
 
-
+/**
+ * Função que permite deleter utilizador
+ * 
+ * @param {Object} req pedido do cliente
+ * @param {Object} res resposta do servidor
+ */
 const removerUser = (req, res) => {
     var idUser = req.params.idUser;
 
